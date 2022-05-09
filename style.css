@@ -47,8 +47,17 @@ body {
 body{text-align: center;}
 .img{position:absolute;z-index:-1;}
 
-
-#canvas{
-    position:relative;
-    z-index:1;
-}
+#game {
+    position: relative;
+    padding: 10px;
+  }
+  #game .img1 {
+  
+    display: block;
+    }
+  #game #canvas {
+    position: absolute;
+    outline: 2px solid black;
+    top: 21%;
+    left: 29%;
+  }
