@@ -41,20 +41,14 @@ table {
 body {
     background-image: url(back.gif); 
     background-repeat: no-repeat;
-    background-size: 100% 100%;
+    background-size: cover;
 }
 
-.img{position:absolute;z-index:1;}
-#game{
-    display:inline-block;
-    width:320px; 
-    height:480px;
-    margin: 0 auto; 
-    position:relative; 
-    border-radius: 10px; 
-    box-shadow: 0 5px 50px #333}
+body{text-align: center;}
+.img{position:absolute;z-index:-1;}
+
 
 #canvas{
     position:relative;
-    z-index:20;
+    z-index:1;
 }
