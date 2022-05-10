@@ -8,7 +8,7 @@
 table {
     border-collapse: collapse;
     width: 100%;
-    background-color: rgb(246, 64, 231);
+    background-color: rgb(228, 34, 34);
   }
   
   th, td {
@@ -23,7 +23,7 @@ table {
     padding: 10em;
   }
   a:link, a:visited {
-      background-color: rgb(246, 64, 231);
+      background-color: rgb(153, 7, 221);
 
       color: black;
       text-align: center;
@@ -61,3 +61,20 @@ body{text-align: center;}
     top: 21%;
     left: 29%;
   }
+  .button {
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 25px;
+    border-color: #111111;
+    border-style: dotted;
+  }
+  
+  .button2 {background-color: #4CAF50;} /* Green */
+  .button1 {background-color: #e01616;} /* Blue */
