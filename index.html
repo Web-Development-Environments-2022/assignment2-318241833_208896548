@@ -27,6 +27,10 @@
 		</div>
 		<div id="login">
 			<!-- todo add login -->
+			<button class="button button2" onclick="SetActiveDiv('game');Start();">Login</button>
+		</div>
+		</div>
+		<div id="game">
 			<div id="score">
 				<label for="lblScore">SCORE:</label>
 				<input id="lblScore" type="text" />
@@ -40,21 +44,35 @@
 				<center><canvas id="canvas" height="600" width="600" style="background-color: white; border-radius: 25px;" ></canvas></center>
 			</div>
 		</div>
-		<div id="About">
+		<div id="about">
 			<!-- todo add -->
 		</div>
 
 		<script type="text/javascript">
+			// cancel scrolling with keyboard
+
+			window.addEventListener("keydown", function(e) {
+				if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
+					e.preventDefault();
+				}
+			}, false);
+		</script>
+
+
+		<script type="text/javascript">
+			// handle move between pages
 
             document.getElementById('register').style.display = "none";
             document.getElementById('login').style.display = "none";
-            document.getElementById('About').style.display = "none";
+            document.getElementById('about').style.display = "none";
+			document.getElementById('game').style.display = "none";
 
         function SetActiveDiv(el) {
 			document.getElementById('welcome').style.display = "none";
             document.getElementById('register').style.display = "none";
             document.getElementById('login').style.display = "none";
-            document.getElementById('About').style.display = "none";
+            document.getElementById('about').style.display = "none";
+			document.getElementById('game').style.display = "none";
 
             document.getElementById(el).style.display = "block";
         }

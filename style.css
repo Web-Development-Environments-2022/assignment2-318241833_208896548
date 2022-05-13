@@ -8,7 +8,7 @@
 table {
     border-collapse: collapse;
     width: 100%;
-    background-color: rgb(228, 34, 34);
+    background-color: rgb(153, 7, 221);
   }
   
   th, td {
@@ -76,5 +76,5 @@ body{text-align: center;}
     border-style: dotted;
   }
   
-  .button2 {background-color: #4CAF50;} /* Green */
-  .button1 {background-color: #e01616;} /* Blue */
+  .button2 {background-color: #4CAF50;}
+  .button1 {background-color: #e01616;}
