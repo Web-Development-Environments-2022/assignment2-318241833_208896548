@@ -3,6 +3,7 @@
 	<head>
 		<script src="./jquery-3.4.1.slim.min.js"></script>
 		<script type="text/javascript" src="./app.js"></script>
+		<script type="text/javascript" src="./register.js"></script>
 		<link rel="stylesheet" type="text/css" href="style.css" />
 		<center><img src=logo.png width=50% height=50% /></center>
 		<table border="1" align=center cellpadding=10 cellspacing="0" bordercolor="#111111" width="100%" >
@@ -26,20 +27,31 @@
 		<center><div id="register" style="border-color: #111111; border-radius: 25px; border-style: dotted; background-color: cadetblue;   width: fit-content; 
 		height: fit-content; padding: 3px;">
 			<br/>
+			<label for="lblUser">User Name:</label>
 			<input id="userRegister" class="input-box" type="text"  placeholder="UserName" />
 			<br/>
 			<br/>
+			<label for="lblPass">Password:</label>
 			<input id="passRegister" class="input-box"  placeholder="Password"/>
 			<br/>
 			<br/>
-			<input id="nameRegister" class="input-box"  placeholder="Full name" />
+			<label for="lblFname">First Name:</label>
+			<input id="firstNameRegister" class="input-box"  placeholder="First name" />
 			<br/>
 			<br/>
+			<label for="lblLname">Last Name:</label>
+			<input id="lastNameRegister" class="input-box"  placeholder="Last name" />
+			<br/>
+			<br/>
+			<label for="lblEmail">Email:</label>
 			<input id="emailRegister" class="input-box"  placeholder="Email" />
 			<br/>
 			<br/>
-			<!-- todo add birthdate selector-->
-			<button class="button button1" onclick="SetActiveDiv('login');">Register</button>
+			<label for="lblDate">Date:</label>
+			<input type="date" id="dateRegister" name="trip-start" value="2018-07-22" min="1900-01-01" max="2022-12-31">
+			<br/>
+			<br/>
+			<button class="button button1" onclick="CheckRegister();">Register</button>
 		</div></center>
 		<br/>
 		<div id="settings">
@@ -49,14 +61,14 @@
 		<div id="login" style="border-color: #111111; border-radius: 25px; border-style: dotted; background-color: cadetblue;   width: fit-content; 
 		height: fit-content; padding: 3px;">
 			<br/>
-			<center><label for="lblUser">UserName:</label>
-			<input id="lblUser" type="text" /></center>
+			<center><label for="lblUser">User Name:</label>
+			<input id="userLogin" type="text" placeholder="UserName"/></center>
 			<br/>
 
 			<center><label for="lblPass">Password:</label>
-			<input id="lblPass" type="text" /></center>
+			<input id="passLogin" type="text" placeholder="Password"/></center>
 			<br/>
-			<button class="button button2" onclick="SetActiveDiv('game');Start();">Login</button>
+			<button class="button button2" onclick="Login()">Login</button>
 		</center>
 		</div>
 		<div id="game">
