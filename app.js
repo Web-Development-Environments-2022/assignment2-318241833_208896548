@@ -76,7 +76,13 @@ function Start() {
 				var randomNum = Math.random();
 				if (randomNum <= (1.0 * food_remain) / cnt) {
 					food_remain--;
-					board[i][j] = 1;
+					var randomNum2 = Math.random();
+                    if (randomNum2>=0.6)
+                        board[i][j] = 1;
+                    else if (randomNum2>=0.3&&randomNum2<0.6)
+                        board[i][j] = 3;
+                    else   
+                        board[i][j] = 7;
 				} else if (randomNum < (1.0 * (pacman_remain + food_remain)) / cnt) {
 					shape.i = i;
 					shape.j = j;
@@ -181,7 +187,20 @@ function Draw(x) {
 				context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // circle
 				context.fillStyle = "black"; //color
 				context.fill();
-			} else if (board[i][j] == 4) {
+			} 
+			else if (board[i][j] == 3) {
+				context.beginPath();
+				context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // circle
+				context.fillStyle = "red"; //color
+				context.fill();
+			}
+			else if (board[i][j] == 7) {
+				context.beginPath();
+				context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // circle
+				context.fillStyle = "green"; //color
+				context.fill();
+			}
+			else if (board[i][j] == 4) {
 				context.beginPath();
 				context.rect(center.x - 30, center.y - 30, 60, 60);
 				context.fillStyle = "grey"; //color
@@ -226,7 +245,16 @@ function UpdatePosition() {
 	}
 	else{x=5}
 	if (board[shape.i][shape.j] == 1) {
-		score++;
+		score+=5;
+	}
+	if (board[shape.i][shape.j] == 6) {
+		score+=50;
+	}
+	if (board[shape.i][shape.j] == 3) {
+		score+=15;
+	}
+	if (board[shape.i][shape.j] == 7) {
+		score+=25;
 	}
 	board[shape.i][shape.j] = 2;
 	var currentTime = new Date();

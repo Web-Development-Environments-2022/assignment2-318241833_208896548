@@ -63,6 +63,5 @@ function Login() {
         return;
     }
 
-    SetActiveDiv('game');
-    Start();
+    SetActiveDiv('settings');
 }
