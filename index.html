@@ -22,10 +22,29 @@
 			<button class="button button1" onclick="SetActiveDiv('register');">Register</button>
 			<button class="button button2" onclick="SetActiveDiv('login');">Login</button>
 		</div>
-		<div id="register">
+		<br/>
+		<center><div id="register" style="border-color: #111111; border-radius: 25px; border-style: dotted; background-color: cadetblue;   width: fit-content; 
+		height: fit-content; padding: 3px;">
+			<br/>
+			<input id="userRegister" class="input-box" type="text"  placeholder="UserName" />
+			<br/>
+			<br/>
+			<input id="passRegister" class="input-box"  placeholder="Password"/>
+			<br/>
+			<br/>
+			<input id="nameRegister" class="input-box"  placeholder="Full name" />
+			<br/>
+			<br/>
+			<input id="emailRegister" class="input-box"  placeholder="Email" />
+			<br/>
+			<br/>
+			<!-- todo add birthdate selector-->
+			<button class="button button1" onclick="SetActiveDiv('login');">Register</button>
+		</div></center>
+		<br/>
+		<div id="settings">
 			<!-- todo add -->
 		</div>
-		<br/>
 		<center>
 		<div id="login" style="border-color: #111111; border-radius: 25px; border-style: dotted; background-color: cadetblue;   width: fit-content; 
 		height: fit-content; padding: 3px;">
@@ -41,6 +60,8 @@
 		</center>
 		</div>
 		<div id="game">
+			<center><div id="top" style="border-color: #111111; border-radius: 5px; border-style: dotted; background-color: cadetblue;   width: fit-content; 
+			height: fit-content; padding: 3px;">
 			<div id="score">
 				<label for="lblScore">SCORE:</label>
 				<input id="lblScore" type="text" />
@@ -49,6 +70,7 @@
 				<label for="lblTime">TIME:</label>
 				<input id="lblTime" type="text" />
 			</div>
+		</div></center>
 			<div id="game" style="position:relative; text-align: center; ">
 				<center><img class='img1' src="border.png" height="1000" width="1000" alt="" id="back"/></center>
 				<center><canvas id="canvas" height="600" width="600" style="background-color: white; border-radius: 25px;" ></canvas></center>

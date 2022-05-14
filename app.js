@@ -8,6 +8,7 @@ var time_elapsed;
 var interval;
 var last_pos = 1;
 var ghost_sprite;
+var cherry_sprite;
 
 
 $(document).ready(function() {
@@ -31,6 +32,9 @@ function Start() {
 		for (var j = 0; j < 10; j++) {
 			if(i==0&&j==0){
 				board[i][j]=5
+			}
+			if(i==5&&j==5){
+				board[i][j]=6
 			}
 			else if (
 				(i==1&&j==0)||
@@ -94,6 +98,8 @@ function Start() {
 
 	ghost_sprite = new Image();
 	ghost_sprite.src = "ghost.png";
+	cherry_sprite = new Image();
+	cherry_sprite.src = "cherry.png";
 
 	addEventListener(
 		"keydown",
@@ -181,8 +187,11 @@ function Draw(x) {
 				context.fillStyle = "grey"; //color
 				context.fill();
 			}
-			else if (board[i][j]==5){
+			if (board[i][j]==5){
 				context.drawImage(ghost_sprite, center.x-15, center.y-15);
+			}
+			if (board[i][j]==6){
+				context.drawImage(cherry_sprite, center.x-15, center.y-15);
 			}
 		}
 	}
