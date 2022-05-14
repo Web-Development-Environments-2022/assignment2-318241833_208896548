@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<script src="./jquery-3.4.1.slim.min.js"></script>
-		<script type="text/javascript" src="./app.js"></script>
-		<script type="text/javascript" src="./register.js"></script>
+		<script src="./scripts/jquery-3.4.1.slim.min.js"></script>
+		<script type="text/javascript" src="./scripts/app.js"></script>
+		<script type="text/javascript" src="./scripts/register.js"></script>
 		<link rel="stylesheet" type="text/css" href="style.css" />
-		<center><img src=logo.png width=50% height=50% /></center>
+		<center><img src=./imgs/logo.png width=50% height=50% /></center>
 		<center><h1 style="background-color:#111111; color:white;border-color: #ffffff; border-radius: 25px; border-style: dotted; background-color: #111111;   width: fit-content; 
 		height: fit-content; padding: 3px;">By Eldar Karol & Yarin Bnyamin</center></h1>
 		<table border="1" align=center cellpadding=10 cellspacing="0" bordercolor="#111111" width="100%" >
@@ -20,8 +20,8 @@
 
 	<body>
 		<div id="welcome">
-			<center><img src=welcom.png width=50% height=50% /></center>
-			<center><img src=pacman_logo.png width=50% height=50% /></center>
+			<center><img src=./imgs/welcom.png width=50% height=50% /></center>
+			<center><img src=./imgs/pacman_logo.png width=50% height=50% /></center>
 			<button class="button button1" onclick="SetActiveDiv('register');">Register</button>
 			<button class="button button2" onclick="SetActiveDiv('login');">Login</button>
 		</div>
@@ -171,7 +171,7 @@
 			</div>
 		</div></center>
 			<div id="game" style="position:relative; text-align: center; ">
-				<center><img class='img1' src="border.png" height="1000" width="1000" alt="" id="back"/></center>
+				<center><img class='img1' src="./imgs/border.png" height="1000" width="1000" alt="" id="back"/></center>
 				<center><canvas id="canvas" height="600" width="600" style="background-color: white; border-radius: 25px;" ></canvas></center>
 			</div>
 		</div>
@@ -206,7 +206,7 @@
             document.getElementById('about').style.display = "none";
 			document.getElementById('game').style.display = "none";
 			document.getElementById('settings').style.display = "none";
-			
+
             document.getElementById(el).style.display = "block";
         }
 

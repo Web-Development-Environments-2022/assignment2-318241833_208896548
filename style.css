@@ -39,7 +39,7 @@ table {
     resize: none ;
     }
 body {
-    background-image: url(back.gif); 
+    background-image: url(./imgs/back.gif); 
     background-repeat: no-repeat;
     background-size: cover;
 }

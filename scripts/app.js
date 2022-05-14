@@ -103,9 +103,9 @@ function Start() {
 	keysDown = {};
 
 	ghost_sprite = new Image();
-	ghost_sprite.src = "ghost.png";
+	ghost_sprite.src = "./imgs/ghost.png";
 	cherry_sprite = new Image();
-	cherry_sprite.src = "cherry.png";
+	cherry_sprite.src = "./imgs/cherry.png";
 
 	addEventListener(
 		"keydown",
