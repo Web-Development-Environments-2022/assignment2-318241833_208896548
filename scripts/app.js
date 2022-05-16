@@ -30,13 +30,13 @@ function Start() {
 		board[i] = new Array();
 		//put obstacles
 		for (var j = 0; j < 10; j++) {
-			if(i==0&&j==0){
+			if(i==0&&j==0){  // ghost
 				board[i][j]=5
 			}
-			if(i==5&&j==5){
+			else if(i==5&&j==5){  // cherry
 				board[i][j]=6
 			}
-			else if (
+			else if (  // wall
 				(i==1&&j==0)||
 				(i==5&&j==0)||
 				(i==9&&j==0)||
@@ -74,7 +74,7 @@ function Start() {
 				board[i][j] = 4;
 			} else {
 				var randomNum = Math.random();
-				if (randomNum <= (1.0 * food_remain) / cnt) {
+				if (randomNum <= (1.0 * food_remain) / cnt) {  // points
 					food_remain--;
 					var randomNum2 = Math.random();
                     if (randomNum2>=0.6)
@@ -83,21 +83,42 @@ function Start() {
                         board[i][j] = 3;
                     else   
                         board[i][j] = 7;
-				} else if (randomNum < (1.0 * (pacman_remain + food_remain)) / cnt) {
+				} else if (pacman_remain != 0 && (randomNum < (1.0 * (pacman_remain + food_remain)) / cnt)) {  // pacman
 					shape.i = i;
 					shape.j = j;
 					pacman_remain--;
 					board[i][j] = 2;
-				} else {
+				} else {  // empty
 					board[i][j] = 0;
 				}
 				cnt--;
 			}
 		}
+		if (pacman_remain != 0){  // if pacman not located
+			for (var j = 0; j < 10; j++) {
+				if (board[i][j] == 0){
+					shape.i = i;
+					shape.j = j;
+					pacman_remain--;
+					board[i][j] = 2;
+
+					if (pacman_remain == 0)
+						break;
+				}
+			}
+		}
 	}
 	while (food_remain > 0) {
 		var emptyCell = findRandomEmptyCell(board);
-		board[emptyCell[0]][emptyCell[1]] = 1;
+		var randomNum2 = Math.random();
+
+		if (randomNum2>=0.6)
+			board[emptyCell[0]][emptyCell[1]] = 1;
+		else if (randomNum2>=0.3&&randomNum2<0.6)
+			board[emptyCell[0]][emptyCell[1]] = 3;
+		else
+			board[emptyCell[0]][emptyCell[1]] = 7;
+
 		food_remain--;
 	}
 	keysDown = {};
