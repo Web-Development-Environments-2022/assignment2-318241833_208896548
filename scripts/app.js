@@ -1,5 +1,8 @@
 var context;
 var shape = new Object();
+var ghost = new Object();
+var lst_ghost = 0;  // what was where the ghost walk
+var ghost_speed = 0.3;
 var board;
 var score;
 var pac_color;
@@ -9,7 +12,8 @@ var interval;
 var last_pos = 1;
 var ghost_sprite;
 var cherry_sprite;
-
+var heart = 5;
+var pacman_remain = 1;
 
 $(document).ready(function() {
 	context = canvas.getContext("2d");
@@ -18,19 +22,27 @@ $(document).ready(function() {
 
 
 function Start() {
+
+	document.getElementById('heart1').src = "./imgs/heart.png";
+	document.getElementById('heart2').src = "./imgs/heart.png";
+	document.getElementById('heart3').src = "./imgs/heart.png";
+	document.getElementById('heart4').src = "./imgs/heart.png";
+	document.getElementById('heart5').src = "./imgs/heart.png";
+
 	context = canvas.getContext("2d");
 	board = new Array();
 	score = 0;
 	pac_color = "yellow";
 	var cnt = 100;
 	var food_remain = 50;
-	var pacman_remain = 1;
 	start_time = new Date();
 	for (var i = 0; i < 10; i++) {
 		board[i] = new Array();
 		//put obstacles
 		for (var j = 0; j < 10; j++) {
 			if(i==0&&j==0){  // ghost
+				ghost.i = i;
+				ghost.j = j;
 				board[i][j]=5
 			}
 			else if(i==5&&j==5){  // cherry
@@ -94,20 +106,12 @@ function Start() {
 				cnt--;
 			}
 		}
-		if (pacman_remain != 0){  // if pacman not located
-			for (var j = 0; j < 10; j++) {
-				if (board[i][j] == 0){
-					shape.i = i;
-					shape.j = j;
-					pacman_remain--;
-					board[i][j] = 2;
-
-					if (pacman_remain == 0)
-						break;
-				}
-			}
-		}
 	}
+
+	if (pacman_remain != 0){  // if pacman not located
+		respawn();
+	}
+
 	while (food_remain > 0) {
 		var emptyCell = findRandomEmptyCell(board);
 		var randomNum2 = Math.random();
@@ -121,6 +125,7 @@ function Start() {
 
 		food_remain--;
 	}
+
 	keysDown = {};
 
 	ghost_sprite = new Image();
@@ -143,6 +148,25 @@ function Start() {
 		false
 	);
 	interval = setInterval(UpdatePosition, 250);
+}
+
+function respawn() {
+	while(pacman_remain != 0){
+		for (var i = 0; i < 10; i++){
+			for (var j = 0; j < 10; j++) {
+				var randomNum2 = Math.random();
+				if (board[i][j] == 0 && randomNum2<=0.3){
+					shape.i = i;
+					shape.j = j;
+					pacman_remain--;
+					board[i][j] = 2;
+
+					if (pacman_remain == 0)
+						return;
+				}
+			}
+		}
+	}
 }
 
 function findRandomEmptyCell(board) {
@@ -170,7 +194,7 @@ function GetKeyPressed() {
 	}
 }
 
-function Draw(x) {
+function Draw() {
 	canvas.width = canvas.width; //clean board
 	lblScore.value = score;
 	lblTime.value = time_elapsed;
@@ -239,6 +263,7 @@ function Draw(x) {
 
 function UpdatePosition() {
 	board[shape.i][shape.j] = 0;
+	
 	var x = GetKeyPressed();
 	if (x == 1) {
 		if (shape.j > 0 && board[shape.i][shape.j - 1] != 4) {
@@ -264,29 +289,72 @@ function UpdatePosition() {
 			last_pos = 1;
 		}
 	}
-	else{x=5}
-	if (board[shape.i][shape.j] == 1) {
+
+	// score
+	if (board[shape.i][shape.j] == 5) {
+		// touch a ghost
+		score-=10;
+		document.getElementById('heart'+heart).src = "./imgs/ghost.png";
+		heart--;
+		if(heart==0){
+			// game over
+			window.clearInterval(interval);
+			window.alert("Game Over");
+		}
+		pacman_remain++;
+		respawn();
+		return;
+	}
+	else if (board[shape.i][shape.j] == 1) {
 		score+=5;
 	}
-	if (board[shape.i][shape.j] == 6) {
+	else if (board[shape.i][shape.j] == 6) {
 		score+=50;
 	}
-	if (board[shape.i][shape.j] == 3) {
+	else if (board[shape.i][shape.j] == 3) {
 		score+=15;
 	}
-	if (board[shape.i][shape.j] == 7) {
+	else if (board[shape.i][shape.j] == 7) {
 		score+=25;
 	}
+
+
+	board[Math.floor(ghost.i)][Math.floor(ghost.j)] = lst_ghost;
+	//var randomNum2 = Math.random();
+	//if (randomNum2<=0.5){
+		if (Math.floor(ghost.i) < shape.i)
+			if(board[Math.floor(ghost.i+1)][Math.floor(ghost.j)] != 4)
+				ghost.i += ghost_speed;
+		else if (Math.floor(ghost.i) > shape.i)
+			if(board[Math.floor(ghost.i-1)][Math.floor(ghost.j)] != 4)
+				ghost.i -= ghost_speed;
+	//}
+	//else{
+		if (Math.floor(ghost.j) < shape.j)
+			if(board[Math.floor(ghost.i)][Math.floor(ghost.j+1)] != 4)
+				ghost.j += ghost_speed;
+		else if (Math.floor(ghost.j) > shape.j)
+			if(board[Math.floor(ghost.i)][Math.floor(ghost.j-1)] != 4)
+				ghost.j -= ghost_speed;
+	//}
+
+	
+	if (Math.floor(ghost.i) != ghost.i)
+		lst_ghost = board[Math.floor(ghost.i)][Math.floor(ghost.j)];
+
+
 	board[shape.i][shape.j] = 2;
+	board[Math.floor(ghost.i)][Math.floor(ghost.j)] = 5;
+
 	var currentTime = new Date();
 	time_elapsed = (currentTime - start_time) / 1000;
 	if (score >= 20 && time_elapsed <= 10) {
 		pac_color = "green";
 	}
-	if (score == 50) {
+	if (score == 1500) {
 		window.clearInterval(interval);
 		window.alert("Game completed");
 	} else {
-		Draw(x);
+		Draw();
 	}
 }
