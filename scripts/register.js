@@ -62,6 +62,6 @@ function Login() {
         alert("not exist user / wrong password");
         return;
     }
-
+    document.getElementById('mytextarea').innerHTML =username;
     SetActiveDiv('settings');
 }
