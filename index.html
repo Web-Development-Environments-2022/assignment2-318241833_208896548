@@ -13,7 +13,7 @@
 			  <td width="12.5%"><center><a href="#" onclick="SetActiveDiv('welcome');"><STRONG>Welcome</STRONG></a></center></td>
 			  <td width="12.5%"><center><a href="#" onclick="SetActiveDiv('register');"><STRONG>Register</STRONG></a></center></td>
 			  <td width="12.5%"><center><a href="#" onclick="SetActiveDiv('login');"><STRONG>Login</STRONG></a></center></td>
-			  <td width="12.5%"><center><a href="#" onclick="myFunction()"><STRONG>About</STRONG></a></center></td>
+			  <td width="12.5%"><center><a href="#" onclick="popUp()"><STRONG>About</STRONG></a></center></td>
 			</tr>
 		  </table>
 	</head>
@@ -69,12 +69,12 @@
 			<br/>
 			<button class="button button2" onclick="Login()">Login</button>
 		</center>
-		<dialog id="myDialog">
+		<dialog id="myDialog" class="dialogComponent">
 			<table style="width: 100%; border: 0px;" cellpadding="3" cellspacing="0">
 				<tr>
 				   <td><center><h3>Eldar Karol & Yarin Bnyamin</h3></center></td>
 				   <td>
-					<button style="border:#111111" onclick="myFunction2()">X</button>
+					<button style="border:#111111" onclick="closePopUp()">X</button>
 				   </td>
 				</tr>
 				<tr>
@@ -279,12 +279,8 @@
 							</select>
 							<br/>
 							<br/>
-			</div>
-			</div>
-			
-		</div>
-		<div id="about">
-			<!-- todo add -->
+				</div>
+			</div>			
 		</div>
 
 		<script type="text/javascript">
@@ -297,13 +293,11 @@
 			}, false);
 		</script>
 
-
 		<script type="text/javascript">
 			// handle move between pages
 
             document.getElementById('register').style.display = "none";
             document.getElementById('login').style.display = "none";
-            document.getElementById('about').style.display = "none";
 			document.getElementById('game').style.display = "none";
 			document.getElementById('settings').style.display = "none";
 
@@ -311,7 +305,6 @@
 			document.getElementById('welcome').style.display = "none";
             document.getElementById('register').style.display = "none";
             document.getElementById('login').style.display = "none";
-            document.getElementById('about').style.display = "none";
 			document.getElementById('game').style.display = "none";
 			document.getElementById('settings').style.display = "none";
 
@@ -319,14 +312,23 @@
         }
 
 		</script>
+
 		<script>
-			function myFunction() { 
+			// handle about pop up
+			function popUp() { 
 				document.getElementById("myDialog").showModal(); 
 			} 
 		
-			function myFunction2() { 
+			function closePopUp() { 
 				document.getElementById("myDialog").close(); 
 			}
+
+			$('#myDialog').click(function(e) {
+				if (e.target.classList.contains("dialogComponent"))
+					document.getElementById("myDialog").close(); 
+			});
 		</script>
+		
+		
 	</body>
 </html>
