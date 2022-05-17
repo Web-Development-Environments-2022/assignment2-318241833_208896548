@@ -2,7 +2,7 @@ var context;
 var shape = new Object();
 var ghost = new Object();
 var lst_ghost = 0;  // what was where the ghost walk
-var ghost_speed = 0.3;
+var ghost_speed = 1;  // 0.3
 var board;
 var score;
 var pac_color;
@@ -291,21 +291,7 @@ function UpdatePosition() {
 	}
 
 	// score
-	if (board[shape.i][shape.j] == 5) {
-		// touch a ghost
-		score-=10;
-		document.getElementById('heart'+heart).src = "./imgs/ghost.png";
-		heart--;
-		if(heart==0){
-			// game over
-			window.clearInterval(interval);
-			window.alert("Game Over");
-		}
-		pacman_remain++;
-		respawn();
-		return;
-	}
-	else if (board[shape.i][shape.j] == 1) {
+	if (board[shape.i][shape.j] == 1) {
 		score+=5;
 	}
 	else if (board[shape.i][shape.j] == 6) {
@@ -320,28 +306,39 @@ function UpdatePosition() {
 
 
 	board[Math.floor(ghost.i)][Math.floor(ghost.j)] = lst_ghost;
-	//var randomNum2 = Math.random();
-	//if (randomNum2<=0.5){
-		if (Math.floor(ghost.i) < shape.i)
+	var randomNum2 = Math.random();
+	if (randomNum2<=0.5){
+		if (Math.floor(ghost.i) < shape.i){
 			if(board[Math.floor(ghost.i+1)][Math.floor(ghost.j)] != 4)
 				ghost.i += ghost_speed;
-		else if (Math.floor(ghost.i) > shape.i)
+		}
+		else if (Math.floor(ghost.i) > shape.i){
 			if(board[Math.floor(ghost.i-1)][Math.floor(ghost.j)] != 4)
 				ghost.i -= ghost_speed;
-	//}
-	//else{
-		if (Math.floor(ghost.j) < shape.j)
+		}			
+	}
+	else{
+		if (Math.floor(ghost.j) < shape.j){
 			if(board[Math.floor(ghost.i)][Math.floor(ghost.j+1)] != 4)
 				ghost.j += ghost_speed;
-		else if (Math.floor(ghost.j) > shape.j)
+		}
+		else if (Math.floor(ghost.j) > shape.j){
 			if(board[Math.floor(ghost.i)][Math.floor(ghost.j-1)] != 4)
 				ghost.j -= ghost_speed;
-	//}
+		}
+	}
+	// check ghost stayed in the same location randomy move somewhere else
 
 	
-	if (Math.floor(ghost.i) != ghost.i)
+	if (Math.floor(ghost.i) != ghost.i && Math.floor(ghost.j) != ghost.j)
 		lst_ghost = board[Math.floor(ghost.i)][Math.floor(ghost.j)];
 
+
+	if(Math.floor(ghost.i)==shape.i && Math.floor(ghost.j)==shape.j){
+		// player collision with ghost
+		PlayerDie();
+		return;
+	}
 
 	board[shape.i][shape.j] = 2;
 	board[Math.floor(ghost.i)][Math.floor(ghost.j)] = 5;
@@ -357,4 +354,21 @@ function UpdatePosition() {
 	} else {
 		Draw();
 	}
+}
+
+function PlayerDie() {
+	ghost.i = 0;
+	ghost.j = 0;
+	board[0][0]=5
+
+	score-=10;
+	document.getElementById('heart'+heart).src = "./imgs/ghost.png";
+	heart--;
+	if(heart==0){
+		// game over
+		window.clearInterval(interval);
+		window.alert("Game Over");
+	}
+	pacman_remain++;
+	respawn();
 }
