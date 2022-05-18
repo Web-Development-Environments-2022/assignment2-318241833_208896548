@@ -27,9 +27,11 @@ var time_sprite;
 var mushroom_sprite;
 var heart = 5;
 var pacman_remain = 1;
-var dotcolor5
-var dotcolor15
-var dotcolor25
+var totalFood;
+var goalFood;
+var dotcolor5;
+var dotcolor15;
+var dotcolor25;
 
 $(document).ready(function() {
 	context = canvas.getContext("2d");
@@ -48,8 +50,10 @@ function Start() {
 	lst_cherry=0;
 	mushroom_cherry=0;
 	last_pos = 1;
+	pacman_remain = 1;
 
 	number_of_ghosts = $( "#ghosts" ).val();
+	totalFood = $( "#dots" ).val();
 	
 	cherryNotEaten=true;
 	context = canvas.getContext("2d");
@@ -58,6 +62,8 @@ function Start() {
 	pac_color = "yellow";
 	var cnt = 100;
 	var food_remain = 50;
+	goalFood = 50;
+	totalFood -= 50;
 	start_time = new Date();
 	let counter = 0;
 	for (var i = 0; i < 10; i++) {
@@ -361,12 +367,15 @@ function UpdatePosition() {
 	// score
 	if (board[shape.i][shape.j] == 1) {
 		score+=5;
+		goalFood--;
 	}
 	else if (board[shape.i][shape.j] == 3) {
 		score+=15;
+		goalFood--;
 	}
 	else if (board[shape.i][shape.j] == 7) {
 		score+=25;
+		goalFood--;
 	}
 	else if (board[shape.i][shape.j] == 8){ //  touched wild mushroom
 		var randomNum2 = Math.random();
@@ -404,12 +413,13 @@ function UpdatePosition() {
 
 	if(cherryNotEaten){
 
-		lst_cherry = randomlyMove(cherry, cherry_speed, lst_cherry);
-
-		board[Math.floor(cherry.i)][Math.floor(cherry.j)] = 6;
+		lst_cherry = randomlyMove(cherry, cherry_speed, lst_cherry);	
 		if(Math.floor(cherry.i)==shape.i && Math.floor(cherry.j)==shape.j){
-			score+=50;
-			cherryNotEaten=false;
+			score += 50;
+			cherryNotEaten = false;
+		}
+		else{
+			board[Math.floor(cherry.i)][Math.floor(cherry.j)] = 6;
 		}
 	}	
 
@@ -446,9 +456,27 @@ function UpdatePosition() {
 	// if (score >= 20 && time_elapsed <= 10) {
 	// 	pac_color = "green";
 	// }
-	if (score == 1500) {
-		window.clearInterval(interval);
-		window.alert("Game completed")
+	if (goalFood == 0) {
+		if(totalFood != 0){
+			goalFood += totalFood;
+			while (totalFood > 0) {
+				var emptyCell = findRandomEmptyCell(board);
+				var randomNum2 = Math.random();
+		
+				if (randomNum2>=0.6)
+					board[emptyCell[0]][emptyCell[1]] = 1;
+				else if (randomNum2>=0.3&&randomNum2<0.6)
+					board[emptyCell[0]][emptyCell[1]] = 3;
+				else
+					board[emptyCell[0]][emptyCell[1]] = 7;
+		
+				totalFood--;
+			}
+		}
+		else{
+			window.clearInterval(interval);
+			window.alert("Game 100% completed - you are a winner!");
+		}
 	}
 	if(Math.floor(time_elapsed)>=maxTime){
 		window.clearInterval(interval);
@@ -507,7 +535,7 @@ function PlayerDie() {
 	if(heart==0){
 		// game over
 		window.clearInterval(interval);
-		window.alert("Game Over");
+		window.alert("Loser!");
 	}
 	pacman_remain++;
 	respawn();
