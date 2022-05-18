@@ -10,19 +10,26 @@ var ghost_speed = 0.3;  // 0.3
 var cherry_speed = 0.7;
 var cherryNotEaten=true;
 var mushroomExist=false;
+var timeExist=false;
 var board;
 var score;
 var pac_color;
 var start_time;
 var time_elapsed;
+var timeGlass=new Object();
+var maxTime;
 var timeSave;
 var interval;
 var last_pos = 1;
 var ghost_sprite;
 var cherry_sprite;
+var time_sprite;
 var mushroom_sprite;
 var heart = 5;
 var pacman_remain = 1;
+var dotcolor5
+var dotcolor15
+var dotcolor25
 
 $(document).ready(function() {
 	context = canvas.getContext("2d");
@@ -31,6 +38,7 @@ $(document).ready(function() {
 
 function Start() {
 	// starting settings
+	maxTime=document.getElementById("setTm").value;
 	heart = 5;
 	for(var i=1; i<=heart; i++){
 		document.getElementById('heart'+i).src = "./imgs/heart.png";
@@ -148,6 +156,8 @@ function Start() {
 	cherry_sprite.src = "./imgs/cherry.png";
 	mushroom_sprite = new Image();
 	mushroom_sprite.src = "./imgs/mushroom.png";
+	time_sprite = new Image();
+	time_sprite.src = "./imgs/time1.png";
 
 	addEventListener(
 		"keydown",
@@ -201,6 +211,22 @@ function wildMushroomAppeared(){
 	}
 
 }
+function randomTimeAppeared(){
+	while(timeExist){
+		for (var i = 0; i < 10; i++){
+			for (var j = 0; j < 10; j++) {
+				var randomNum3 = Math.random();
+				if (board[i][j] == 0 && randomNum3<=0.3){
+					timeGlass.i = i;
+					timeGlass.j = j;
+					board[i][j] = 9;
+					return;
+				}
+			}
+		}
+	}
+
+}
 
 function findRandomEmptyCell(board) {
 	var i = Math.floor(Math.random() * 9 + 1);
@@ -228,6 +254,9 @@ function GetKeyPressed() {
 }
 
 function Draw() {
+	dotcolor5=document.getElementById("5color")
+	dotcolor15=document.getElementById("15color")
+	dotcolor25=document.getElementById("25color")
 	canvas.width = canvas.width; //clean board
 	lblScore.value = score;
 	lblTime.value = time_elapsed;
@@ -263,19 +292,19 @@ function Draw() {
 			} else if (board[i][j] == 1) {
 				context.beginPath();
 				context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // circle
-				context.fillStyle = "black"; //color
+				context.fillStyle = dotcolor5.value//5points
 				context.fill();
 			} 
 			else if (board[i][j] == 3) {
 				context.beginPath();
 				context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // circle
-				context.fillStyle = "red"; //color
+				context.fillStyle = dotcolor15.value; //15points
 				context.fill();
 			}
 			else if (board[i][j] == 7) {
 				context.beginPath();
 				context.arc(center.x, center.y, 15, 0, 2 * Math.PI); // circle
-				context.fillStyle = "green"; //color
+				context.fillStyle = dotcolor25.value; //25points
 				context.fill();
 			}
 			else if (board[i][j] == 4) {
@@ -292,6 +321,9 @@ function Draw() {
 			}
 			if(board[i][j]==8){
 				context.drawImage(mushroom_sprite, center.x-15, center.y-15);
+			}
+			if(board[i][j]==9){
+				context.drawImage(time_sprite, center.x-15, center.y-15);
 			}
 		}
 	}
@@ -340,6 +372,10 @@ function UpdatePosition() {
 		// todo add what wild mushroom do
 		mushroomExist=false;
 	}
+	else if (board[shape.i][shape.j] == 9){ //  touched time
+		// todo add what time do
+		mushroomExist=false;
+	}
 
 	if(cherryNotEaten){
 
@@ -371,6 +407,11 @@ function UpdatePosition() {
 		wildMushroomAppeared();
 		mushroomExist=true;
 	}
+	if (Math.floor(time_elapsed%10)==0&&Math.floor(time_elapsed)!=0&&timeExist==false){
+		timeExist=true;
+		randomTimeAppeared();
+		
+	}
 	if(mushroomExist && time_elapsed-timeSave>=5){
 		board[mushroom.i][mushroom.j] = 0;
 		mushroomExist=false;
@@ -382,8 +423,19 @@ function UpdatePosition() {
 	// }
 	if (score == 1500) {
 		window.clearInterval(interval);
-		window.alert("Game completed");
-	} else {
+		window.alert("Game completed")
+	}
+	if(Math.floor(time_elapsed)>=maxTime){
+		window.clearInterval(interval);
+		if(score<100){
+			window.alert("You are better then "+ score+" points!");
+		}
+		else
+		{
+			window.alert("Winner!!!");
+		}
+	}
+	 else {
 		Draw();
 	}
 }
