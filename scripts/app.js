@@ -1,12 +1,13 @@
 var context;
+var number_of_ghosts;
 var shape = new Object();
-var ghost = new Object();
+var ghost = [new Object(), new Object(), new Object(), new Object()];
 var cherry = new Object();
 var mushroom = new Object();
-var lst_ghost = 0;  // what was where the ghost walk
+var lst_ghost = [0, 0, 0, 0];  // what was where the ghost walk
 var lst_cherry=0;
-var ghost_speed = 1;  // 0.3
-var cherry_speed = 1;
+var ghost_speed = 0.3;  // 0.3
+var cherry_speed = 0.7;
 var cherryNotEaten=true;
 var randMushroom=false;
 var mushroomExist=false;
@@ -31,16 +32,18 @@ $(document).ready(function() {
 
 
 function Start() {
-
-	document.getElementById('heart1').src = "./imgs/heart.png";
-	document.getElementById('heart2').src = "./imgs/heart.png";
-	document.getElementById('heart3').src = "./imgs/heart.png";
-	document.getElementById('heart4').src = "./imgs/heart.png";
-	document.getElementById('heart5').src = "./imgs/heart.png";
+	// starting settings
 	heart = 5;
-	lst_ghost = 0;
+	for(var i=1; i<=heart; i++){
+		document.getElementById('heart'+i).src = "./imgs/heart.png";
+	}
+	
+	lst_ghost = [0, 0, 0, 0];
 	lst_cherry=0;
 	mushroom_cherry=0;
+	last_pos = 1;
+
+	number_of_ghosts = 4;
 	
 	cherryNotEaten=true;
 	context = canvas.getContext("2d");
@@ -50,14 +53,16 @@ function Start() {
 	var cnt = 100;
 	var food_remain = 50;
 	start_time = new Date();
+	let counter = 0;
 	for (var i = 0; i < 10; i++) {
 		board[i] = new Array();
 		//put obstacles
 		for (var j = 0; j < 10; j++) {
-			if(i==0&&j==0){  // ghost
-				ghost.i = i;
-				ghost.j = j;
+			if((i==0&&j==0 || i==0&&j==9 || i==9&&j==0 || i==9&&j==9) && counter < number_of_ghosts){  // ghosts
+				ghost[counter].i = i;
+				ghost[counter].j = j;
 				board[i][j]=5
+				counter++;
 			}
 			else if(i==5&&j==5){  // cherry
 				cherry.i = i;
@@ -338,8 +343,6 @@ function UpdatePosition() {
 		score+=25;
 	}
 
-	lst_ghost = followPlayer(ghost, lst_ghost, ghost_speed);
-
 	if(cherryNotEaten){
 
 		lst_cherry = randomlyMove(cherry, cherry_speed, lst_cherry);
@@ -351,15 +354,19 @@ function UpdatePosition() {
 		}
 	}	
 
+	for(i=0; i<number_of_ghosts; i++){
+		lst_ghost[i] = followPlayer(ghost[i], lst_ghost[i], ghost_speed);
 
-	if(Math.floor(ghost.i)==shape.i && Math.floor(ghost.j)==shape.j){
-		// player collision with ghost
-		PlayerDie();
-		return;
+		if(Math.floor(ghost[i].i)==shape.i && Math.floor(ghost[i].j)==shape.j){
+			// player collision with ghost
+			PlayerDie();
+			return;
+		}
+
+		board[Math.floor(ghost[i].i)][Math.floor(ghost[i].j)] = 5;
 	}
 
 	board[shape.i][shape.j] = 2;
-	board[Math.floor(ghost.i)][Math.floor(ghost.j)] = 5;
 	
 	if (Math.floor(time_elapsed%10)==0&&Math.floor(time_elapsed)!=0&&mushroomExist==false){
 		timeSave=time_elapsed
@@ -386,11 +393,37 @@ function UpdatePosition() {
 }
 
 function PlayerDie() {
-	ghost.i = 0;
-	ghost.j = 0;
-	board[0][0]=5
+
+	for(i=0; i<number_of_ghosts; i++){
+		board[Math.floor(ghost[i].i)][Math.floor(ghost[i].j)] = lst_ghost[i];
+	}
+
+	ghost[0].i = 0;
+	ghost[0].j = 0;
+	board[0][0]=5;
+
+	if(number_of_ghosts >= 2){
+		ghost[1].i = 0;
+		ghost[1].j = 9;
+		board[0][9]=5;
+	}
+
+	if(number_of_ghosts >= 3){
+		ghost[2].i = 9;
+		ghost[2].j = 0;
+		board[9][0]=5;
+	}
+
+	if(number_of_ghosts >= 4){
+		ghost[3].i = 9;
+		ghost[3].j = 9;
+		board[9][9]=5;
+	}
+
+	lst_ghost = [0, 0, 0, 0];
 
 	score-=10;
+	lblScore.value = score;
 	document.getElementById('heart'+heart).src = "./imgs/ghost.png";
 	heart--;
 	if(heart==0){
