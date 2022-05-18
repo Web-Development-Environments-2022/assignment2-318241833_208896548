@@ -4,8 +4,8 @@ var ghost = new Object();
 var cherry = new Object();
 var lst_ghost = 0;  // what was where the ghost walk
 var lst_cherry=0;
-var ghost_speed = 0.5;  // 0.3
-var cherry_speed=0.3;
+var ghost_speed = 1;  // 0.3
+var cherry_speed = 1;
 var cherryNotEaten=true;
 var board;
 var score;
@@ -35,6 +35,7 @@ function Start() {
 	heart = 5;
 	lst_ghost = 0;
 	lst_cherry=0;
+
 	cherryNotEaten=true;
 	context = canvas.getContext("2d");
 	board = new Array();
@@ -303,9 +304,6 @@ function UpdatePosition() {
 	if (board[shape.i][shape.j] == 1) {
 		score+=5;
 	}
-	// else if (board[shape.i][shape.j] == 6) {
-	// 	score+=50;
-	// }
 	else if (board[shape.i][shape.j] == 3) {
 		score+=15;
 	}
@@ -313,50 +311,11 @@ function UpdatePosition() {
 		score+=25;
 	}
 
+	lst_ghost = followPlayer(ghost, lst_ghost, ghost_speed);
 
-	board[Math.floor(ghost.i)][Math.floor(ghost.j)] = lst_ghost;
-	var randomNum2 = Math.random();
-	if (randomNum2<=0.5){
-		if (Math.floor(ghost.i) < shape.i){
-			if(board[Math.floor(ghost.i+1)][Math.floor(ghost.j)] != 4)
-				ghost.i += ghost_speed;
-		}
-		else if (Math.floor(ghost.i) > shape.i){
-			if(board[Math.floor(ghost.i-1)][Math.floor(ghost.j)] != 4)
-				ghost.i -= ghost_speed;
-		}			
-	}
-	else{
-		if (Math.floor(ghost.j) < shape.j){
-			if(board[Math.floor(ghost.i)][Math.floor(ghost.j+1)] != 4)
-				ghost.j += ghost_speed;
-		}
-		else if (Math.floor(ghost.j) > shape.j){
-			if(board[Math.floor(ghost.i)][Math.floor(ghost.j-1)] != 4)
-				ghost.j -= ghost_speed;
-		}
-	}
 	if(cherryNotEaten){
-		board[Math.floor(cherry.i)][Math.floor(cherry.j)] = lst_cherry;
-		var randomNum3 = Math.random();
-		if(randomNum3<=0.25){
-			if(board[Math.floor(cherry.i)][Math.floor(cherry.j+1)] != 4)
-				cherry.j+=cherry_speed;
-		}
-		if(randomNum3<=0.5 && randomNum3>0.25){
-			if(board[Math.floor(cherry.i)][Math.floor(cherry.j-1)] != 4)
-				cherry.j-=cherry_speed;
-		}
-		if(randomNum3<=0.75 && randomNum3>0.5){
-			if(board[Math.floor(cherry.i+1)][Math.floor(cherry.j)] != 4)
-				cherry.i+=cherry_speed;
-		}
-		if(randomNum3>0.75){
-			if(board[Math.floor(cherry.i-1)][Math.floor(cherry.j)] != 4)
-				cherry.i-=cherry_speed;
-		}
 
-		lst_cherry = board[Math.floor(cherry.i)][Math.floor(cherry.j)];
+		lst_cherry = randomlyMove(cherry, cherry_speed, lst_cherry);
 
 		board[Math.floor(cherry.i)][Math.floor(cherry.j)] = 6;
 		if(Math.floor(cherry.i)==shape.i && Math.floor(cherry.j)==shape.j){
@@ -364,12 +323,6 @@ function UpdatePosition() {
 			cherryNotEaten=false;
 		}
 	}	
-			// check ghost stayed in the same location randomy move somewhere else
-
-	lst_ghost = board[Math.floor(ghost.i)][Math.floor(ghost.j)];
-
-	
-		
 
 
 	if(Math.floor(ghost.i)==shape.i && Math.floor(ghost.j)==shape.j){
@@ -410,4 +363,101 @@ function PlayerDie() {
 	}
 	pacman_remain++;
 	respawn();
+}
+
+function followPlayer(obj, lst_obj, obj_speed) {
+	let i = obj.i, j =obj.j;
+	board[Math.floor(obj.i)][Math.floor(obj.j)] = lst_obj;
+	var randomNum2 = Math.random();
+	if (randomNum2<=0.5){
+		if (Math.floor(obj.i) < shape.i){
+			if(validPos(obj.i+1, obj.j)){
+				obj.i += obj_speed;
+			}
+		}
+		else if (Math.floor(obj.i) > shape.i){
+			if(validPos(obj.i-1, obj.j)){
+				obj.i -= obj_speed;
+			}
+		}
+		else if (Math.floor(obj.j) < shape.j){
+			if(validPos(obj.i, obj.j+1)){
+				obj.j += obj_speed;
+			}
+		}
+		else if (Math.floor(obj.j) > shape.j){
+			if(validPos(obj.i, obj.j-1)){
+				obj.j -= obj_speed;
+			}
+		}		
+	}
+	else{
+		if (Math.floor(obj.j) < shape.j){
+			if(validPos(obj.i, obj.j+1)){
+				obj.j += obj_speed;
+			}
+		}
+		else if (Math.floor(obj.j) > shape.j){
+			if(validPos(obj.i, obj.j-1)){
+				obj.j -= obj_speed;
+			}
+		}
+		else if (Math.floor(obj.i) < shape.i){
+			if(validPos(obj.i+1, obj.j)){
+				obj.i += obj_speed;
+			}
+		}
+		else if (Math.floor(obj.i) > shape.i){
+			if(validPos(obj.i-1, obj.j)){
+				obj.i -= obj_speed;
+			}
+		}
+	}
+
+	// if didn't move - randomly move
+	if(i == obj.i && j == obj.j){
+		randomlyMoveLoc(obj, obj_speed);
+	}
+
+	lst_obj = board[Math.floor(obj.i)][Math.floor(obj.j)];
+
+	return lst_obj;
+}
+
+function randomlyMove(obj, obj_speed, lst_obj) {
+
+	board[Math.floor(obj.i)][Math.floor(obj.j)] = lst_obj;
+	randomlyMoveLoc(obj, obj_speed);
+	lst_obj = board[Math.floor(obj.i)][Math.floor(obj.j)];
+
+	return lst_obj;
+}
+
+function randomlyMoveLoc(obj, obj_speed) {
+
+	var randomNum3 = Math.random();
+	if(randomNum3<=0.25 && validPos(obj.i, obj.j+1)){
+		obj.j+=obj_speed;
+	}
+	else if(randomNum3<=0.5 && randomNum3>0.25 && validPos(obj.i, obj.j-1)){
+		obj.j-=obj_speed;
+	}
+	else if(randomNum3<=0.75 && randomNum3>0.5 && validPos(obj.i+1, obj.j)){
+		obj.i+=obj_speed;
+	}
+	else if(randomNum3>0.75 && validPos(obj.i-1, obj.j)){
+		obj.i-=obj_speed;
+	}
+}
+
+function validPos(i, j) {
+	if(i < 0 || j < 0 || i > 9 || j > 9)  // valid position on grid
+		return false;
+	if(board[Math.floor(i)][Math.floor(j)] == 4)  // can't touch walls
+		return false;
+	if(board[Math.floor(i)][Math.floor(j)] == 5)  // can't touch cherry
+		return false;
+	if(board[Math.floor(i)][Math.floor(j)] == 6)  // can't touch ghost
+		return false;
+	return true;
 }
