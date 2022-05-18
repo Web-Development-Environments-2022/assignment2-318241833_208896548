@@ -2,20 +2,26 @@ var context;
 var shape = new Object();
 var ghost = new Object();
 var cherry = new Object();
+var mushroom = new Object();
 var lst_ghost = 0;  // what was where the ghost walk
+var lst_cherry=0;
 var lst_cherry=0;
 var ghost_speed = 0.5;  // 0.3
 var cherry_speed=0.3;
 var cherryNotEaten=true;
+var randMushroom=false;
+var mushroomExist=false;
 var board;
 var score;
 var pac_color;
 var start_time;
 var time_elapsed;
+var timeSave;
 var interval;
 var last_pos = 1;
 var ghost_sprite;
 var cherry_sprite;
+var mushroom_sprite;
 var heart = 5;
 var pacman_remain = 1;
 
@@ -35,6 +41,7 @@ function Start() {
 	heart = 5;
 	lst_ghost = 0;
 	lst_cherry=0;
+	mushroom_cherry=0;
 	cherryNotEaten=true;
 	context = canvas.getContext("2d");
 	board = new Array();
@@ -141,6 +148,8 @@ function Start() {
 	ghost_sprite.src = "./imgs/ghost.png";
 	cherry_sprite = new Image();
 	cherry_sprite.src = "./imgs/cherry.png";
+	mushroom_sprite = new Image();
+	mushroom_sprite.src = "./imgs/mushroom.png";
 
 	addEventListener(
 		"keydown",
@@ -176,6 +185,22 @@ function respawn() {
 			}
 		}
 	}
+}
+function wildMushroomAppeared(){
+	while(randMushroom){
+		for (var i = 0; i < 10; i++){
+			for (var j = 0; j < 10; j++) {
+				var randomNum2 = Math.random();
+				if (board[i][j] == 0 && randomNum2<=0.3){
+					mushroom.i = i;
+					mushroom.j = j;
+					board[i][j] = 8;
+					return;
+				}
+			}
+		}
+	}
+
 }
 
 function findRandomEmptyCell(board) {
@@ -266,6 +291,9 @@ function Draw() {
 			if (board[i][j]==6){
 				context.drawImage(cherry_sprite, center.x-15, center.y-15);
 			}
+			if(board[i][j]==8){
+				context.drawImage(mushroom_sprite, center.x-15, center.y-15);
+			}
 		}
 	}
 }
@@ -303,9 +331,6 @@ function UpdatePosition() {
 	if (board[shape.i][shape.j] == 1) {
 		score+=5;
 	}
-	// else if (board[shape.i][shape.j] == 6) {
-	// 	score+=50;
-	// }
 	else if (board[shape.i][shape.j] == 3) {
 		score+=15;
 	}
@@ -381,12 +406,22 @@ function UpdatePosition() {
 	board[shape.i][shape.j] = 2;
 	board[Math.floor(ghost.i)][Math.floor(ghost.j)] = 5;
 	
-
+	if (Math.floor(time_elapsed%10)==0&&Math.floor(time_elapsed)!=0&&mushroomExist==false){
+		timeSave=time_elapsed
+		mushroomExist=true;
+		randMushroom=true;
+		wildMushroomAppeared();
+	}
+	if(time_elapsed-timeSave>=5){
+		randMushroom=false;
+		board[Math.floor(mushroom.i)][Math.floor(mushroom.j)] = 0;
+		mushroomExist=false
+	}
 	var currentTime = new Date();
 	time_elapsed = (currentTime - start_time) / 1000;
-	if (score >= 20 && time_elapsed <= 10) {
-		pac_color = "green";
-	}
+	// if (score >= 20 && time_elapsed <= 10) {
+	// 	pac_color = "green";
+	// }
 	if (score == 1500) {
 		window.clearInterval(interval);
 		window.alert("Game completed");
