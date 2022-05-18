@@ -9,7 +9,6 @@ var lst_cherry=0;
 var ghost_speed = 0.3;  // 0.3
 var cherry_speed = 0.7;
 var cherryNotEaten=true;
-var randMushroom=false;
 var mushroomExist=false;
 var board;
 var score;
@@ -27,7 +26,6 @@ var pacman_remain = 1;
 
 $(document).ready(function() {
 	context = canvas.getContext("2d");
-	// Start();
 });
 
 
@@ -116,11 +114,6 @@ function Start() {
                         board[i][j] = 3;
                     else   
                         board[i][j] = 7;
-				} else if (pacman_remain != 0 && (randomNum < (1.0 * (pacman_remain + food_remain)) / cnt)) {  // pacman
-					shape.i = i;
-					shape.j = j;
-					pacman_remain--;
-					board[i][j] = 2;
 				} else {  // empty
 					board[i][j] = 0;
 				}
@@ -129,7 +122,7 @@ function Start() {
 		}
 	}
 
-	if (pacman_remain != 0){  // if pacman not located
+	while (pacman_remain != 0){  // if pacman not located
 		respawn();
 	}
 
@@ -174,9 +167,9 @@ function Start() {
 }
 
 function respawn() {
-	while(pacman_remain != 0){
-		for (var i = 0; i < 10; i++){
-			for (var j = 0; j < 10; j++) {
+	while(true){
+		for (var i = 3; i < 7; i++){
+			for (var j = 3; j < 7; j++) {
 				var randomNum2 = Math.random();
 				if (board[i][j] == 0 && randomNum2<=0.3){
 					shape.i = i;
@@ -184,15 +177,16 @@ function respawn() {
 					pacman_remain--;
 					board[i][j] = 2;
 
-					if (pacman_remain == 0)
+					if (pacman_remain == 0){
 						return;
+					}
 				}
 			}
 		}
 	}
 }
 function wildMushroomAppeared(){
-	while(randMushroom){
+	while(!mushroomExist){
 		for (var i = 0; i < 10; i++){
 			for (var j = 0; j < 10; j++) {
 				var randomNum2 = Math.random();
@@ -342,6 +336,10 @@ function UpdatePosition() {
 	else if (board[shape.i][shape.j] == 7) {
 		score+=25;
 	}
+	else if (board[shape.i][shape.j] == 8){ //  touched wild mushroom
+		// todo add what wild mushroom do
+		mushroomExist=false;
+	}
 
 	if(cherryNotEaten){
 
@@ -370,14 +368,12 @@ function UpdatePosition() {
 	
 	if (Math.floor(time_elapsed%10)==0&&Math.floor(time_elapsed)!=0&&mushroomExist==false){
 		timeSave=time_elapsed
-		mushroomExist=true;
-		randMushroom=true;
 		wildMushroomAppeared();
+		mushroomExist=true;
 	}
-	if(time_elapsed-timeSave>=5){
-		randMushroom=false;
-		board[Math.floor(mushroom.i)][Math.floor(mushroom.j)] = 0;
-		mushroomExist=false
+	if(mushroomExist && time_elapsed-timeSave>=5){
+		board[mushroom.i][mushroom.j] = 0;
+		mushroomExist=false;
 	}
 	var currentTime = new Date();
 	time_elapsed = (currentTime - start_time) / 1000;
@@ -396,6 +392,11 @@ function PlayerDie() {
 
 	for(i=0; i<number_of_ghosts; i++){
 		board[Math.floor(ghost[i].i)][Math.floor(ghost[i].j)] = lst_ghost[i];
+	}
+
+	if(mushroomExist){
+		board[mushroom.i][mushroom.j] = 0;
+		mushroomExist=false;
 	}
 
 	ghost[0].i = 0;
@@ -528,6 +529,8 @@ function validPos(i, j) {
 	if(board[Math.floor(i)][Math.floor(j)] == 5)  // can't touch cherry
 		return false;
 	if(board[Math.floor(i)][Math.floor(j)] == 6)  // can't touch ghost
+		return false;
+	if(board[Math.floor(i)][Math.floor(j)] == 8)  // can't touch wild mushroom
 		return false;
 	return true;
 }
