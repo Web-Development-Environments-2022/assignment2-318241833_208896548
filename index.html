@@ -169,7 +169,7 @@
 						<br/>
 						<br/>
 					<button class="button button1" id="rand">random</button>
-					<button class="button button2" onclick="SetActiveDiv('game');Start();">play</button>
+					<button class="button button2" id="play">play</button>
 		</div>
 	</center>
 		<div id="game">
@@ -325,9 +325,20 @@
             document.getElementById('login').style.display = "none";
 			document.getElementById('game').style.display = "none";
 			document.getElementById('settings').style.display = "none";
-
+			
             document.getElementById(el).style.display = "block";
         }
+
+		$("#play").click(function(){
+			let tSet = $( "#setTm" ).val();
+			if(tSet<60){
+				alert("Time must be at least 60 secends");
+				return;
+			}
+			SetActiveDiv('game');
+			Start();
+		});
+
 		document.getElementById("rand").addEventListener("click", function() {
     	var select = document.getElementById('dots');
     	var items = select.getElementsByTagName('option');
