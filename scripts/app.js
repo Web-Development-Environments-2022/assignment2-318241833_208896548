@@ -1,8 +1,12 @@
 var context;
 var shape = new Object();
 var ghost = new Object();
+var cherry = new Object();
 var lst_ghost = 0;  // what was where the ghost walk
-var ghost_speed = 1;  // 0.3
+var lst_cherry=0;
+var ghost_speed = 0.5;  // 0.3
+var cherry_speed=0.3;
+var cherryNotEaten=true;
 var board;
 var score;
 var pac_color;
@@ -28,7 +32,10 @@ function Start() {
 	document.getElementById('heart3').src = "./imgs/heart.png";
 	document.getElementById('heart4').src = "./imgs/heart.png";
 	document.getElementById('heart5').src = "./imgs/heart.png";
-
+	heart = 5;
+	lst_ghost = 0;
+	lst_cherry=0;
+	cherryNotEaten=true;
 	context = canvas.getContext("2d");
 	board = new Array();
 	score = 0;
@@ -46,6 +53,8 @@ function Start() {
 				board[i][j]=5
 			}
 			else if(i==5&&j==5){  // cherry
+				cherry.i = i;
+				cherry.j = j;
 				board[i][j]=6
 			}
 			else if (  // wall
@@ -294,9 +303,9 @@ function UpdatePosition() {
 	if (board[shape.i][shape.j] == 1) {
 		score+=5;
 	}
-	else if (board[shape.i][shape.j] == 6) {
-		score+=50;
-	}
+	// else if (board[shape.i][shape.j] == 6) {
+	// 	score+=50;
+	// }
 	else if (board[shape.i][shape.j] == 3) {
 		score+=15;
 	}
@@ -327,11 +336,40 @@ function UpdatePosition() {
 				ghost.j -= ghost_speed;
 		}
 	}
-	// check ghost stayed in the same location randomy move somewhere else
+	if(cherryNotEaten){
+		board[Math.floor(cherry.i)][Math.floor(cherry.j)] = lst_cherry;
+		var randomNum3 = Math.random();
+		if(randomNum3<=0.25){
+			if(board[Math.floor(cherry.i)][Math.floor(cherry.j+1)] != 4)
+				cherry.j+=cherry_speed;
+		}
+		if(randomNum3<=0.5 && randomNum3>0.25){
+			if(board[Math.floor(cherry.i)][Math.floor(cherry.j-1)] != 4)
+				cherry.j-=cherry_speed;
+		}
+		if(randomNum3<=0.75 && randomNum3>0.5){
+			if(board[Math.floor(cherry.i+1)][Math.floor(cherry.j)] != 4)
+				cherry.i+=cherry_speed;
+		}
+		if(randomNum3>0.75){
+			if(board[Math.floor(cherry.i-1)][Math.floor(cherry.j)] != 4)
+				cherry.i-=cherry_speed;
+		}
+
+		lst_cherry = board[Math.floor(cherry.i)][Math.floor(cherry.j)];
+
+		board[Math.floor(cherry.i)][Math.floor(cherry.j)] = 6;
+		if(Math.floor(cherry.i)==shape.i && Math.floor(cherry.j)==shape.j){
+			score+=50;
+			cherryNotEaten=false;
+		}
+	}	
+			// check ghost stayed in the same location randomy move somewhere else
+
+	lst_ghost = board[Math.floor(ghost.i)][Math.floor(ghost.j)];
 
 	
-	if (Math.floor(ghost.i) != ghost.i && Math.floor(ghost.j) != ghost.j)
-		lst_ghost = board[Math.floor(ghost.i)][Math.floor(ghost.j)];
+		
 
 
 	if(Math.floor(ghost.i)==shape.i && Math.floor(ghost.j)==shape.j){
@@ -342,6 +380,7 @@ function UpdatePosition() {
 
 	board[shape.i][shape.j] = 2;
 	board[Math.floor(ghost.i)][Math.floor(ghost.j)] = 5;
+	
 
 	var currentTime = new Date();
 	time_elapsed = (currentTime - start_time) / 1000;
