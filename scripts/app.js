@@ -6,7 +6,7 @@ var cherry = new Object();
 var mushroom = new Object();
 var lst_ghost = [0, 0, 0, 0];  // what was where the ghost walk
 var lst_cherry=0;
-var ghost_speed = 0.3;  // 0.3
+var ghost_speed = 0.3;
 var cherry_speed = 0.7;
 var cherryNotEaten=true;
 var mushroomExist=false;
@@ -41,7 +41,7 @@ function Start() {
 	mushroom_cherry=0;
 	last_pos = 1;
 
-	number_of_ghosts = 4;
+	number_of_ghosts = $( "#ghosts" ).val();
 	
 	cherryNotEaten=true;
 	context = canvas.getContext("2d");
@@ -187,8 +187,8 @@ function respawn() {
 }
 function wildMushroomAppeared(){
 	while(!mushroomExist){
-		for (var i = 0; i < 10; i++){
-			for (var j = 0; j < 10; j++) {
+		for (var i = 2; i < 8; i++){
+			for (var j = 2; j < 8; j++) {
 				var randomNum2 = Math.random();
 				if (board[i][j] == 0 && randomNum2<=0.3){
 					mushroom.i = i;
@@ -337,7 +337,32 @@ function UpdatePosition() {
 		score+=25;
 	}
 	else if (board[shape.i][shape.j] == 8){ //  touched wild mushroom
-		// todo add what wild mushroom do
+		var randomNum2 = Math.random();
+
+		if(number_of_ghosts == 1 || (number_of_ghosts != 4 && randomNum2<=0.5)){
+			if(number_of_ghosts == 1){
+				ghost[number_of_ghosts].i = 0;
+				ghost[number_of_ghosts].j = 9;
+				lst_ghost[number_of_ghosts] = board[0][9];
+			}
+			else if(number_of_ghosts == 2){
+				ghost[number_of_ghosts].i = 9;
+				ghost[number_of_ghosts].j = 0;
+				lst_ghost[number_of_ghosts] = board[9][0];
+			}
+			else if(number_of_ghosts == 3){
+				ghost[number_of_ghosts].i = 9;
+				ghost[number_of_ghosts].j = 9;
+				lst_ghost[number_of_ghosts] = board[9][9];
+			}
+			number_of_ghosts++;
+		}
+		else{
+			number_of_ghosts--;
+			board[Math.floor(ghost[number_of_ghosts].i)][Math.floor(ghost[number_of_ghosts].j)] = lst_ghost[number_of_ghosts];
+		}
+		
+		
 		mushroomExist=false;
 	}
 
@@ -437,6 +462,7 @@ function PlayerDie() {
 }
 
 function followPlayer(obj, lst_obj, obj_speed) {
+	
 	let i = obj.i, j =obj.j;
 	board[Math.floor(obj.i)][Math.floor(obj.j)] = lst_obj;
 	var randomNum2 = Math.random();
@@ -522,7 +548,7 @@ function randomlyMoveLoc(obj, obj_speed) {
 }
 
 function validPos(i, j) {
-	if(i < 0 || j < 0 || i > 9 || j > 9)  // valid position on grid
+	if(i < 0 || j < 0 || i > 10 || j > 10)  // valid position on grid
 		return false;
 	if(board[Math.floor(i)][Math.floor(j)] == 4)  // can't touch walls
 		return false;
