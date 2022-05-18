@@ -398,8 +398,8 @@ function UpdatePosition() {
 		mushroomExist=false;
 	}
 	else if (board[shape.i][shape.j] == 9){ //  touched time
-		// todo add what time do
-		mushroomExist=false;
+		start_time.setSeconds(start_time.getSeconds()+10);
+		timeExist=false;
 	}
 
 	if(cherryNotEaten){
@@ -514,6 +514,7 @@ function PlayerDie() {
 }
 
 function followPlayer(obj, lst_obj, obj_speed) {
+	return
 	
 	let i = obj.i, j =obj.j;
 	board[Math.floor(obj.i)][Math.floor(obj.j)] = lst_obj;
