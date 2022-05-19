@@ -179,6 +179,7 @@ function Start() {
 		},
 		false
 	);
+	clearInterval(interval);
 	interval = setInterval(UpdatePosition, 250);
 }
 
@@ -542,8 +543,7 @@ function PlayerDie() {
 }
 
 function followPlayer(obj, lst_obj, obj_speed) {
-	return
-	
+	// return;  // uncomment when want easy mode
 	let i = obj.i, j =obj.j;
 	board[Math.floor(obj.i)][Math.floor(obj.j)] = lst_obj;
 	var randomNum2 = Math.random();

@@ -4,6 +4,7 @@
 		<script src="./scripts/jquery-3.4.1.slim.min.js"></script>
 		<script type="text/javascript" src="./scripts/app.js"></script>
 		<script type="text/javascript" src="./scripts/register.js"></script>
+		<script type="text/javascript" src="./scripts/pageSettings.js"></script>
 		<link rel="stylesheet" type="text/css" href="style.css" />
 		<center><img src=./imgs/logo.png width=50% height=50% /></center>
 		<center><h1 style="background-color:#111111; color:white;border-color: #ffffff; border-radius: 25px; border-style: dotted; background-color: #111111;   width: fit-content; 
@@ -89,16 +90,16 @@
 			<h1>Settings</h1>
 
 						<label for="UpKey">Up:   </label>
-						<input id="UpKey" class="input-box-config" value="Up" type="button" onclick="changeUpKey()"/>
+						<input id="UpKey" class="input-box-config" value="Up" type="button" onclick="changeKey('UpKey')"/>
 
 						<label for="DownKey">Down:   </label>
-						<input id="DownKey" class="input-box-config" value="Down" type="button" onclick="changeDownKey()" />
+						<input id="DownKey" class="input-box-config" value="Down" type="button" onclick="changeKey('DownKey')" />
 
 						<label for="LeftKey">Left:   </label>
-						<input id="LeftKey" class="input-box-config" value="Left" type="button" onclick="changeLeftKey()"/>
+						<input id="LeftKey" class="input-box-config" value="Left" type="button" onclick="changeKey('LeftKey')"/>
 
 						<label for="RightKey">Right:   </label>
-						<input id="RightKey" class="input-box-config" value="Right" type="button" onclick="changeRightKey()"/>
+						<input id="RightKey" class="input-box-config" value="Right" type="button" onclick="changeKey('RightKey')"/>
 						<br/>
 						<br/>
 						<label for="dotsNum">Number of dots:   </label>
@@ -207,20 +208,20 @@
 				<h1>Settings</h1>  
 					<!-- todo static -->
 							<label for="UpKey">Up:   </label>
-							<input id="UpKey" class="input-box-config" value="Up" type="button" onclick="changeUpKey()"/>
+							<input id="UpKey" class="input-box-config" value="Up" type="button" disabled/>
 							<br/>
 							<label for="DownKey">Down:   </label>
-							<input id="DownKey" class="input-box-config" value="Down" type="button" onclick="changeDownKey()" />
+							<input id="DownKey" class="input-box-config" value="Down" type="button" disabled />
 							<br/>
 							<label for="LeftKey">Left:   </label>
-							<input id="LeftKey" class="input-box-config" value="Left" type="button" onclick="changeLeftKey()"/>
+							<input id="LeftKey" class="input-box-config" value="Left" type="button" disabled/>
 							<br/>
 							<label for="RightKey">Right:   </label>
-							<input id="RightKey" class="input-box-config" value="Right" type="button" onclick="changeRightKey()"/>
+							<input id="RightKey" class="input-box-config" value="Right" type="button" disabled/>
 							<br/>
 							<br/>
 							<label for="dotsNum">Number of dots:   </label>
-							<select id="dots2" name="numOfDots">
+							<select id="dots2" name="numOfDots" disabled>
 								<option value="50">50</option>
 								<option value="51">51</option>
 								<option value="52">52</option>
@@ -266,21 +267,21 @@
 							<br/>
 							<br/>
 							<label for="5point">5 points dot color:   </label>
-							<input type="color" id="5color2" name="5color" value="#ff0000">
+							<input type="color" id="5color2" name="5color" value="#ff0000" disabled>
 							<br/>
 							<label for="15point">15 points dot color:   </label>
-							<input type="color" id="15color2" name="15color" value="#ff0000">
+							<input type="color" id="15color2" name="15color" value="#ff0000" disabled>
 							<br/>
 							<label for="25point">25 points dot color:   </label>
-							<input type="color" id="25color2" name="25color" value="#ff0000">
+							<input type="color" id="25color2" name="25color" value="#ff0000" disabled>
 							<br/>
 							<br/>
 							<label for="setTime">Game Time (min 60 sec):   </label>
-							<input type = "number" id="setTm2" min = "60" step = "1" value = "60" style="width: 5em"/>
+							<input type = "number" id="setTm2" min = "60" step = "1" value = "60" style="width: 5em" disabled />
 							<br/>
 							<br/>
 							<label for="ghostsNum">Number of ghost:   </label>
-							<select id="ghosts2" name="numOfGhosts">
+							<select id="ghosts2" name="numOfGhosts" disabled>
 								<option value="1">1</option>
 								<option value="2">2</option>
 								<option value="3">3</option>
@@ -301,110 +302,6 @@
 			</center></td>
 			</tr>
 		  </table>
-		<script type="text/javascript">
-			// cancel scrolling with keyboard
-
-			window.addEventListener("keydown", function(e) {
-				if(["Space","ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].indexOf(e.code) > -1) {
-					e.preventDefault();
-				}
-			}, false);
-		</script>
-
-		<script type="text/javascript">
-			// handle move between pages
-
-            document.getElementById('register').style.display = "none";
-            document.getElementById('login').style.display = "none";
-			document.getElementById('game').style.display = "none";
-			document.getElementById('settings').style.display = "none";
-
-        function SetActiveDiv(el) {
-			document.getElementById('welcome').style.display = "none";
-            document.getElementById('register').style.display = "none";
-            document.getElementById('login').style.display = "none";
-			document.getElementById('game').style.display = "none";
-			document.getElementById('settings').style.display = "none";
-			
-            document.getElementById(el).style.display = "block";
-        }
-
-		$("#play").click(function(){
-			let tSet = $( "#setTm" ).val();
-			if(tSet<60){
-				alert("Time must be at least 60 secends");
-				return;
-			}
-			SetActiveDiv('game');
-			Start();
-			synchronizeSettings();
-		});
-
-		document.getElementById("rand").addEventListener("click", function() {
-			var select = document.getElementById('dots');
-			var items = select.getElementsByTagName('option');
-			var index = Math.floor(Math.random() * items.length);
-			select.selectedIndex = index;
-			select = document.getElementById('ghosts');
-			items = select.getElementsByTagName('option');
-			index = Math.floor(Math.random() * items.length);
-			select.selectedIndex = index;
-			var dotcolor=document.getElementById("5color");
-			dotcolor.value='#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6)
-			dotcolor=document.getElementById("15color");
-			dotcolor.value='#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6)
-			dotcolor=document.getElementById("25color");
-			dotcolor.value='#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6)
-			var Time=document.getElementById("setTm")
-			Time.value=getRandomInt(60,3600);
-		});
-
-		function getRandomInt(min, max) {
-			min = Math.ceil(min);
-			max = Math.floor(max);
-			return ""+Math.floor(Math.random() * (max - min) + min);
-		}
-
-		// other settings windowvar select = document.getElementById('dots');
-		function synchronizeSettings(){
-			var select = document.getElementById('dots');
-			var items = select.getElementsByTagName('option');
-			var select2=document.getElementById('dots2')
-			select2.selectedIndex=select.selectedIndex;
-			select = document.getElementById('ghosts');
-			select2=document.getElementById('ghosts2')
-			items = select.getElementsByTagName('option');
-			select2.selectedIndex=select.selectedIndex;
-			var dotcolor=document.getElementById("5color");
-			var dotcolor2=document.getElementById("5color2")
-			dotcolor2.value=dotcolor.value
-			dotcolor=document.getElementById("15color");
-			dotcolor2=document.getElementById("15color2")
-			dotcolor2.value=dotcolor.value
-			dotcolor=document.getElementById("25color");
-			dotcolor2=document.getElementById("25color2")
-			dotcolor2.value=dotcolor.value
-			var Time=document.getElementById("setTm")
-			var Time2=document.getElementById("setTm2").value=Time.value
-		}
-		</script>
-
-		<script>
-			// handle about pop up
-			function popUp() { 
-				document.getElementById("myDialog").showModal(); 
-			} 
-		
-			function closePopUp() { 
-				document.getElementById("myDialog").close(); 
-			}
-
-			$('#myDialog').click(function(e) {
-				if (e.target.classList.contains("dialogComponent"))
-					document.getElementById("myDialog").close(); 
-			});
-		</script>
-		
 		
 	</body>
 </html>
