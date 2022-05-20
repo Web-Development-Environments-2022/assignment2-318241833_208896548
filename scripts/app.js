@@ -37,6 +37,10 @@ var goalFood;
 var dotcolor5;
 var dotcolor15;
 var dotcolor25;
+var up;
+var down;
+var left;
+var right;
 
 $(document).ready(function() {
 	context = canvas.getContext("2d");
@@ -73,6 +77,12 @@ function Start() {
 	mushroomExist=false;
 	timeExist=false;
 	heartExist=false;
+
+
+	up=document.getElementById("UpKey").value;
+	down=document.getElementById("DownKey").value;
+	left=document.getElementById("LeftKey").value;
+	right=document.getElementById("RightKey").value;
 
 	number_of_ghosts = $( "#ghosts" ).val();
 	totalFood = $( "#dots" ).val();
@@ -180,14 +190,38 @@ function Start() {
 	addEventListener(
 		"keydown",
 		function(e) {
-			keysDown[e.keyCode] = true;
+			let key = e.keyCode;
+			if(key == 37) 
+				key = "Left";
+			else if(key == 38) 
+				key = "Up";
+			else if(key == 39) 
+				key = "Right";
+			else if(key == 40) 
+				key = "Down";
+			else
+				key=String.fromCharCode(key);
+
+			keysDown[key] = true;
 		},
 		false
 	);
 	addEventListener(
 		"keyup",
 		function(e) {
-			keysDown[e.keyCode] = false;
+			let key = e.keyCode;
+			if(key == 37) 
+				key = "Left";
+			else if(key == 38) 
+				key = "Up";
+			else if(key == 39) 
+				key = "Right";
+			else if(key == 40) 
+				key = "Down";
+			else
+				key=String.fromCharCode(key);
+				
+			keysDown[key] = false;
 		},
 		false
 	);
@@ -261,16 +295,16 @@ function findRandomEmptyCell(board) {
 }
 
 function GetKeyPressed() {
-	if (keysDown[38]) {
+	if (keysDown[up]) {
 		return 1;
 	}
-	if (keysDown[40]) {
+	if (keysDown[down]) {
 		return 2;
 	}
-	if (keysDown[37]) {
+	if (keysDown[left]) {
 		return 3;
 	}
-	if (keysDown[39]) {
+	if (keysDown[right]) {
 		return 4;
 	}
 }
@@ -480,7 +514,7 @@ function UpdatePosition() {
 			board[Math.floor(cherry.i)][Math.floor(cherry.j)] = 6;
 		}
 	}
-	
+
 	board[shape.i][shape.j] = 2;
 
 	for(i=0; i<number_of_ghosts; i++){
@@ -574,8 +608,11 @@ function UpdatePosition() {
 
 function PlayerDie() {
 
+	board[shape.i][shape.j] = 0;
+
 	for(i=0; i<number_of_ghosts; i++){
-		board[Math.floor(ghost[i].i)][Math.floor(ghost[i].j)] = lst_ghost[i];
+		if (lst_ghost[i] != 2)
+			board[Math.floor(ghost[i].i)][Math.floor(ghost[i].j)] = lst_ghost[i];
 	}
 
 	if(mushroomExist){

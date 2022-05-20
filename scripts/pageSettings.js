@@ -54,6 +54,18 @@ $(document).ready(function() {
             alert("Time must be at least 60 secends");
             return;
         }
+
+        let a = document.getElementById("LeftKey").value;
+        let b = document.getElementById("UpKey").value;
+        let c = document.getElementById("RightKey").value;
+        let d = document.getElementById("DownKey").value;
+
+        if(a==b || a==c || a==d || b==c || b==d || c==d || a==" " || b==" " || c==" " || d==" "){
+            alert("Keyboard setting need to be different from each other, cant use space and can't leave blank");
+            return;
+        }
+
+
         document.getElementById('playA').style.visibility = "hidden";
 		document.getElementById('playA').disabled = true;
         SetActiveDiv('game');
@@ -87,8 +99,12 @@ function synchronizeSettings(){
     dotcolor=document.getElementById("25color");
     dotcolor2=document.getElementById("25color2")
     dotcolor2.value=dotcolor.value
-    var Time=document.getElementById("setTm")
-    document.getElementById("setTm2").value=Time.value
+    var Time=document.getElementById("setTm");
+    document.getElementById("setTm2").value=Time.value;
+    document.getElementById("UpKey2").value = document.getElementById("UpKey").value;
+    document.getElementById("DownKey2").value = document.getElementById("DownKey").value;
+    document.getElementById("LeftKey2").value = document.getElementById("LeftKey").value;
+    document.getElementById("RightKey2").value = document.getElementById("RightKey").value;
 }
 
 
@@ -110,12 +126,38 @@ $(document).ready(function() {
     });
 });
 
+
 // change game keyboard
-function changeKey(key){
-    $(document).keydown(function(event){
-        key_pressed = event.keyCode;
-        //if(key == "up")
-        alert(key_pressed);
-        return;
+$(document).ready(function() {
+    $("#UpKey").keydown(function(event){
+        changeKey("UpKey", event.keyCode);
     });
+    $("#DownKey").keydown(function(event){
+        changeKey("DownKey", event.keyCode);
+    });
+    $("#LeftKey").keydown(function(event){
+        changeKey("LeftKey", event.keyCode);
+    });
+    $("#RightKey").keydown(function(event){
+        changeKey("RightKey", event.keyCode);
+    });
+});
+
+function changeKey(id, key){
+
+    if(!key)
+        key = String.fromCharCode(32);
+    else if(key == 37) 
+        key = "Left";
+    else if(key == 38) 
+        key = "Up";
+    else if(key == 39) 
+        key = "Right";
+    else if(key == 40) 
+        key = "Down";
+    else
+        key = String.fromCharCode(key);
+    
+    document.getElementById(id).value = key;
+
 }
