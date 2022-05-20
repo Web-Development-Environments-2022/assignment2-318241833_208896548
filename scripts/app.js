@@ -37,6 +37,7 @@ var goalFood;
 var dotcolor5;
 var dotcolor15;
 var dotcolor25;
+var music= new Audio('pacMan.mp3');
 
 $(document).ready(function() {
 	context = canvas.getContext("2d");
@@ -56,6 +57,8 @@ $(document).ready(function() {
 
 function Start() {
 	// starting settings
+	music.loop=true;
+	music.play();
 	maxTime=document.getElementById("setTm").value;
 	heart = 5;
 	for(var i=1; i<=heart; i++){
@@ -548,6 +551,7 @@ function UpdatePosition() {
 		}
 		else{
 			window.clearInterval(interval);
+			music.pause();
 			window.alert("Game 100% completed - you are a winner!");
 			document.getElementById('playA').style.visibility = "visible";
 			document.getElementById('playA').disabled = false;
@@ -556,12 +560,14 @@ function UpdatePosition() {
 	if(Math.floor(time_elapsed)>=maxTime){
 		window.clearInterval(interval);
 		if(score<100){
+			music.pause();
 			window.alert("You are better then "+ score+" points!");
 			document.getElementById('playA').style.visibility = "visible";
 			document.getElementById('playA').disabled = false;
 		}
 		else
 		{
+			music.pause();
 			window.alert("Winner!!!");
 			document.getElementById('playA').style.visibility = "visible";
 			document.getElementById('playA').disabled = false;
@@ -573,9 +579,12 @@ function UpdatePosition() {
 }
 
 function PlayerDie() {
+	board[shape.i][shape.j]=0;
 
 	for(i=0; i<number_of_ghosts; i++){
+		if(lst_ghost[i]!=2){
 		board[Math.floor(ghost[i].i)][Math.floor(ghost[i].j)] = lst_ghost[i];
+		}
 	}
 
 	if(mushroomExist){
@@ -614,6 +623,7 @@ function PlayerDie() {
 	if(heart==0){
 		// game over
 		window.clearInterval(interval);
+		music.pause();
 		window.alert("Loser!");
 		document.getElementById('playA').style.visibility = "visible";
 		document.getElementById('playA').disabled = false;
