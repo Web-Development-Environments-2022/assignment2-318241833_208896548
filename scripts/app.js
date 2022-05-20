@@ -4,13 +4,18 @@ var shape = new Object();
 var ghost = [new Object(), new Object(), new Object(), new Object()];
 var cherry = new Object();
 var mushroom = new Object();
+var heartMov=new Object();
 var lst_ghost = [0, 0, 0, 0];  // what was where the ghost walk
 var lst_cherry=0;
+var lst_heart=0;
 var ghost_speed = 0.3;
 var cherry_speed = 0.7;
+var heart_speed=0.5;
 var cherryNotEaten=true;
+var heartNotEaten=true;
 var mushroomExist=false;
 var timeExist=false;
+var heartExist=false;
 var board;
 var score;
 var pac_color;
@@ -24,6 +29,7 @@ var last_pos = 1;
 var ghost_sprite;
 var cherry_sprite;
 var time_sprite;
+var heart_sprite;
 var mushroom_sprite;
 var heart = 5;
 var pacman_remain = 1;
@@ -48,6 +54,7 @@ function Start() {
 	
 	lst_ghost = [0, 0, 0, 0];
 	lst_cherry=0;
+	lst_heart=0;
 	mushroom_cherry=0;
 	last_pos = 1;
 	pacman_remain = 1;
@@ -164,6 +171,8 @@ function Start() {
 	mushroom_sprite.src = "./imgs/mushroom.png";
 	time_sprite = new Image();
 	time_sprite.src = "./imgs/time1.png";
+	heart_sprite = new Image();
+	heart_sprite.src = "./imgs/heart.png";
 
 	addEventListener(
 		"keydown",
@@ -211,6 +220,22 @@ function wildMushroomAppeared(){
 					mushroom.i = i;
 					mushroom.j = j;
 					board[i][j] = 8;
+					return;
+				}
+			}
+		}
+	}
+
+}
+function randomHeartAppeared(){
+	while(!heartExist){
+		for (var i = 2; i < 8; i++){
+			for (var j = 2; j < 8; j++) {
+				var randomNum3 = Math.random();
+				if (board[i][j] == 0 && randomNum3<=0.3){
+					heartMov.i = i;
+					heartMov.j = j;
+					board[i][j] = 10;
 					return;
 				}
 			}
@@ -332,6 +357,10 @@ function Draw() {
 			if(board[i][j]==9){
 				context.drawImage(time_sprite, center.x-15, center.y-15);
 			}
+			if(board[i][j]=10)
+			{
+				context.drawImage(heart_sprite, center.x-15, center.y-15);
+			}
 		}
 	}
 }
@@ -411,6 +440,18 @@ function UpdatePosition() {
 		start_time.setSeconds(start_time.getSeconds()+10);
 		timeExist=false;
 	}
+	if(heartNotEaten&& heartExist){
+
+		lst_heart = randomlyMove(heartMov, heart_speed, lst_heart);	
+		if (board[shape.i][shape.j] == 10){//touched heart
+			ocument.getElementById('heart'+heart).src = "./imgs/heart.png";
+			heart++;
+			heartNotEaten=false;
+		}
+		else{
+			board[Math.floor(heartMov.i)][Math.floor(heartMov.j)] = 6;
+		}
+	}
 
 	if(cherryNotEaten){
 
@@ -422,7 +463,7 @@ function UpdatePosition() {
 		else{
 			board[Math.floor(cherry.i)][Math.floor(cherry.j)] = 6;
 		}
-	}	
+	}
 
 	for(i=0; i<number_of_ghosts; i++){
 		lst_ghost[i] = followPlayer(ghost[i], lst_ghost[i], ghost_speed);
@@ -440,8 +481,15 @@ function UpdatePosition() {
 	
 	if (Math.floor(time_elapsed%10)==0&&Math.floor(time_elapsed)!=0&&mushroomExist==false){
 		timeSave=time_elapsed
+		
 		wildMushroomAppeared();
 		mushroomExist=true;
+		if(heart<5){
+			heartNotEaten=true;
+			randomHeartAppeared();
+			heartExist=true;	
+		}
+		
 	}
 	if (Math.floor(time_elapsed%10)==0&&Math.floor(time_elapsed)!=0&&timeExist==false){
 		timeExist=true;
@@ -451,12 +499,10 @@ function UpdatePosition() {
 	if(mushroomExist && time_elapsed-timeSave>=5){
 		board[mushroom.i][mushroom.j] = 0;
 		mushroomExist=false;
+		heartExist=false;
 	}
 	var currentTime = new Date();
 	time_elapsed = (currentTime - start_time) / 1000;
-	// if (score >= 20 && time_elapsed <= 10) {
-	// 	pac_color = "green";
-	// }
 	if (goalFood == 0) {
 		if(totalFood != 0){
 			goalFood += totalFood;
@@ -477,16 +523,22 @@ function UpdatePosition() {
 		else{
 			window.clearInterval(interval);
 			window.alert("Game 100% completed - you are a winner!");
+			document.getElementById('playA').style.visibility = "visible";
+			document.getElementById('playA').disabled = false;
 		}
 	}
 	if(Math.floor(time_elapsed)>=maxTime){
 		window.clearInterval(interval);
 		if(score<100){
 			window.alert("You are better then "+ score+" points!");
+			document.getElementById('playA').style.visibility = "visible";
+			document.getElementById('playA').disabled = false;
 		}
 		else
 		{
 			window.alert("Winner!!!");
+			document.getElementById('playA').style.visibility = "visible";
+			document.getElementById('playA').disabled = false;
 		}
 	}
 	 else {
@@ -537,6 +589,8 @@ function PlayerDie() {
 		// game over
 		window.clearInterval(interval);
 		window.alert("Loser!");
+		document.getElementById('playA').style.visibility = "visible";
+		document.getElementById('playA').disabled = false;
 	}
 	pacman_remain++;
 	respawn();

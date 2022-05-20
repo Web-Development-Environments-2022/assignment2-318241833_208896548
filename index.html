@@ -174,12 +174,12 @@
 		</div>
 	</center>
 		<div id="game">
-			<div class="row">
+			<div class="row" >
 				<div id="userLeft" style="border-color: #111111; height: 100%; border-radius: 5px; border-style: dotted; background-color: cadetblue;   width: fit-content; 
-				height: fit-content; padding: 3px; position: absolute; top: 2%;">
+				height: fit-content; padding: 3px; position: absolute; top: 8%;">
 				<p id="mytextarea"></p>
 				</div>
-			<center><div id="top" style="border-color: #111111; height: 100%; margin: auto; border-radius: 5px; border-style: dotted; background-color: cadetblue;   width: fit-content; 
+			<center><div id="top" style="border-color: #111111; z-index: 1; position: absolute; top: 8%; left: 41.5%; height: 100%; margin: auto; border-radius: 5px; border-style: dotted; background-color: cadetblue;   width: fit-content; 
 				height: fit-content; padding: 3px;">
 				<img src=./imgs/heart.png id="heart1" />
 				<img src=./imgs/heart.png id="heart2" />
@@ -199,7 +199,7 @@
 			
 			
 			<div id="game" style="position:relative; text-align: center; ">
-				<center><img class='img1' src="./imgs/border.png" height="1000" width="1000" alt="" id="back"/></center>
+				<center><img class='img1'style="z-index: -1;" src="./imgs/border.png" height="1000" width="1000" alt="" id="back"/></center>
 				<center><canvas id="canvas" height="600" width="600" style="background-color: white; border-radius: 25px;" ></canvas></center>
 				
 				<div id="settings"  style="border-color: #111111;margin-left: auto; 
@@ -290,6 +290,7 @@
 							<br/>
 							<br/>
 				</div>
+				<button class="button button2" style="position: absolute; top: 65%; left: 5%; visibility:hidden;" id="playA" onclick="SetActiveDiv('settings');" disabled>play again?</button>
 			</div>			
 		</div>
 		<hr style="width:100%;text-align:left;margin-left:0">

@@ -54,6 +54,8 @@ $(document).ready(function() {
             alert("Time must be at least 60 secends");
             return;
         }
+        document.getElementById('playA').style.visibility = "hidden";
+		document.getElementById('playA').disabled = true;
         SetActiveDiv('game');
         Start();
         synchronizeSettings();
