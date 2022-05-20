@@ -126,7 +126,7 @@ function Start() {
 				board[i][j] = 4;
 			} else {
 				var randomNum = Math.random();
-				if (randomNum <= (1.0 * food_remain) / cnt) {  // points
+				if (randomNum < (1.0 * food_remain) / cnt) {  // points
 					food_remain--;
 					var randomNum2 = Math.random();
                     if (randomNum2>=0.6)
@@ -220,6 +220,7 @@ function wildMushroomAppeared(){
 					mushroom.i = i;
 					mushroom.j = j;
 					board[i][j] = 8;
+					mushroomExist=true;
 					return;
 				}
 			}
@@ -236,6 +237,7 @@ function randomHeartAppeared(){
 					heartMov.i = i;
 					heartMov.j = j;
 					board[i][j] = 10;
+					heartExist = true;
 					return;
 				}
 			}
@@ -345,19 +347,19 @@ function Draw() {
 				context.fillStyle = "grey"; //color
 				context.fill();
 			}
-			if (board[i][j]==5){
+			else if (board[i][j]==5){
 				context.drawImage(ghost_sprite, center.x-15, center.y-15);
 			}
-			if (board[i][j]==6){
+			else if (board[i][j]==6){
 				context.drawImage(cherry_sprite, center.x-15, center.y-15);
 			}
-			if(board[i][j]==8){
+			else if(board[i][j]==8){
 				context.drawImage(mushroom_sprite, center.x-15, center.y-15);
 			}
-			if(board[i][j]==9){
+			else if(board[i][j]==9){
 				context.drawImage(time_sprite, center.x-15, center.y-15);
 			}
-			if(board[i][j]=10)
+			else if(board[i][j]==10)
 			{
 				context.drawImage(heart_sprite, center.x-15, center.y-15);
 			}
@@ -407,6 +409,14 @@ function UpdatePosition() {
 		score+=25;
 		goalFood--;
 	}
+	else if (board[shape.i][shape.j] == 6){
+		score += 50;
+		cherryNotEaten = false;
+		
+		if(lst_cherry != 0){
+			goalFood--;
+		}
+	}
 	else if (board[shape.i][shape.j] == 8){ //  touched wild mushroom
 		var randomNum2 = Math.random();
 
@@ -440,16 +450,22 @@ function UpdatePosition() {
 		start_time.setSeconds(start_time.getSeconds()+10);
 		timeExist=false;
 	}
+	else if (board[shape.i][shape.j] == 10){  // touched heart
+		heart++;
+		document.getElementById('heart'+heart).src = "./imgs/heart.png";
+		heartNotEaten=false;
+	}
+
 	if(heartNotEaten&& heartExist){
 
 		lst_heart = randomlyMove(heartMov, heart_speed, lst_heart);	
-		if (board[shape.i][shape.j] == 10){//touched heart
-			ocument.getElementById('heart'+heart).src = "./imgs/heart.png";
+		if (board[shape.i][shape.j] == 10){  // touched heart
 			heart++;
+			document.getElementById('heart'+heart).src = "./imgs/heart.png";
 			heartNotEaten=false;
 		}
 		else{
-			board[Math.floor(heartMov.i)][Math.floor(heartMov.j)] = 6;
+			board[Math.floor(heartMov.i)][Math.floor(heartMov.j)] = 10;
 		}
 	}
 
@@ -483,18 +499,19 @@ function UpdatePosition() {
 		timeSave=time_elapsed
 		
 		wildMushroomAppeared();
-		mushroomExist=true;
-		if(heart<5){
-			heartNotEaten=true;
+
+		if(heart<5 && heartNotEaten && !heartExist){
 			randomHeartAppeared();
-			heartExist=true;	
 		}
 		
 	}
 	if (Math.floor(time_elapsed%10)==0&&Math.floor(time_elapsed)!=0&&timeExist==false){
 		timeExist=true;
 		randomTimeAppeared();
-		
+
+		if(heartExist){
+			heartExist = false;
+		}
 	}
 	if(mushroomExist && time_elapsed-timeSave>=5){
 		board[mushroom.i][mushroom.j] = 0;
@@ -692,6 +709,8 @@ function validPos(i, j) {
 	if(board[Math.floor(i)][Math.floor(j)] == 6)  // can't touch ghost
 		return false;
 	if(board[Math.floor(i)][Math.floor(j)] == 8)  // can't touch wild mushroom
+		return false;
+	if(board[Math.floor(i)][Math.floor(j)] == 10)  // can't touch heart
 		return false;
 	return true;
 }
