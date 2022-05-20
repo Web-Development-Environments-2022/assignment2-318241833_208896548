@@ -46,6 +46,10 @@ $(document).ready(function() {
         dotcolor.value='#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6)
         var Time=document.getElementById("setTm")
         Time.value=getRandomInt(60,3600);
+        document.getElementById("UpKey").value = "Up";
+        document.getElementById("DownKey").value = "Down";
+        document.getElementById("LeftKey").value = "Left";
+        document.getElementById("RightKey").value = "Right"
     });
 
     $("#play").click(function(){
