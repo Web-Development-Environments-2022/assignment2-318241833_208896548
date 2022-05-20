@@ -9,6 +9,8 @@ Yarin Bnyamin 208896548
 ### interesting features:
 ----------------------------------------------------------------------------------
 -wild Mushroom : 50/50 chance of adding or subtracting a ghost (apper every 10 seconds for 5 seconds)
+
 -Hourglass: subtracting 10 seconds from the time spent
+
 -Extar Life: no more then 5 per game. (appear only if you lose at least one life, apper every 10 seconds for 5 seconds and move randomly)
  
