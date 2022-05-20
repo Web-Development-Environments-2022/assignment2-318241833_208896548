@@ -467,7 +467,7 @@ function UpdatePosition() {
 			}
 		}
 		else{
-			board[Math.floor(heartMov.i)][Math.floor(heartMov.j)] = 10;
+			board[Math.floor(heartMov.i)][Math.floor(heartMov.j)] = 10; 
 		}
 	}
 
