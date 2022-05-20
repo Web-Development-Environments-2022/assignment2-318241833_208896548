@@ -11,9 +11,9 @@
 		height: fit-content; padding: 3px;">By Eldar Karol & Yarin Bnyamin</center></h1>
 		<table border="1" align=center cellpadding=10 cellspacing="0" bordercolor="#111111" width="100%" >
 			<tr>
-			  <td width="25%"><center><a href="#" onclick="SetActiveDiv('welcome');"><STRONG>Welcome</STRONG></a></center></td>
-			  <td width="25%"><center><a href="#" onclick="SetActiveDiv('register');"><STRONG>Register</STRONG></a></center></td>
-			  <td width="25%"><center><a href="#" onclick="SetActiveDiv('login');"><STRONG>Login</STRONG></a></center></td>
+			  <td width="25%"><center><a href="#" id="welcomBTN" onclick="SetActiveDiv('welcome');"><STRONG>Welcome</STRONG></a></center></td>
+			  <td width="25%"><center><a href="#" id="registerBTN" onclick="SetActiveDiv('register');"><STRONG>Register</STRONG></a></center></td>
+			  <td width="25%"><center><a href="#" id="loginBTN" onclick="SetActiveDiv('login');"><STRONG>Login</STRONG></a></center></td>
 			  <td width="25%"><center><a href="#" onclick="popUp()"><STRONG>About</STRONG></a></center></td>
 			</tr>
 		  </table>
@@ -70,6 +70,7 @@
 			<br/>
 			<button class="button button2" id="loginButton">Login</button>
 		</center>
+		<br/>
 		<dialog id="myDialog" class="dialogComponent">
 			<table style="width: 100%; border: 0px;" cellpadding="3" cellspacing="0">
 				<tr>
@@ -79,7 +80,7 @@
 				   </td>
 				</tr>
 				<tr>
-				   <td><center><p>text here</p></center></td>
+				   <td><center><p>The most difficult part for us in this assignment was changing the direction keys </p></center></td>
 				</tr>
 		  
 			 </table>
@@ -173,6 +174,7 @@
 					<button class="button button2" id="play">play</button>
 		</div>
 	</center>
+	<br/>
 		<div id="game">
 			<div class="row" >
 				<div id="userLeft" style="border-color: #111111; height: 100%; border-radius: 5px; border-style: dotted; background-color: cadetblue;   width: fit-content; 
@@ -196,7 +198,6 @@
 				</div>
 			</div></center>
 			  </div>
-			
 			
 			<div id="game" style="position:relative; text-align: center; ">
 				<center><img class='img1'style="z-index: -1;" src="./imgs/border.png" height="1000" width="1000" alt="" id="back"/></center>
@@ -290,7 +291,8 @@
 							<br/>
 				</div>
 				<button class="button button2" style="position: absolute; top: 65%; left: 5%; visibility:hidden;" id="playA" onclick="SetActiveDiv('settings');" disabled>play again?</button>
-			</div>			
+			</div>	
+					
 		</div>
 		<hr style="width:100%;text-align:left;margin-left:0">
 		<table border="1" align=center cellpadding=10 cellspacing="0" bordercolor="#111111" width="25%"  >

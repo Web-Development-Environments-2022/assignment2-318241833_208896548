@@ -41,6 +41,7 @@ var up;
 var down;
 var left;
 var right;
+var music= new Audio('pacMan.mp3');
 
 $(document).ready(function() {
 	context = canvas.getContext("2d");
@@ -60,7 +61,12 @@ $(document).ready(function() {
 
 function Start() {
 	// starting settings
+	music.loop=true;
+	music.play();
 	maxTime=document.getElementById("setTm").value;
+	document.getElementById("registerBTN").style.pointerEvents="none";
+	document.getElementById("welcomBTN").style.pointerEvents="none";
+	document.getElementById("loginBTN").style.pointerEvents="none";
 	heart = 5;
 	for(var i=1; i<=heart; i++){
 		document.getElementById('heart'+i).src = "./imgs/heart.png";
@@ -495,7 +501,7 @@ function UpdatePosition() {
 			}
 		}
 		else{
-			board[Math.floor(heartMov.i)][Math.floor(heartMov.j)] = 10;
+			board[Math.floor(heartMov.i)][Math.floor(heartMov.j)] = 10; 
 		}
 	}
 
@@ -582,23 +588,35 @@ function UpdatePosition() {
 		}
 		else{
 			window.clearInterval(interval);
+			music.pause();
 			window.alert("Game 100% completed - you are a winner!");
 			document.getElementById('playA').style.visibility = "visible";
 			document.getElementById('playA').disabled = false;
+			document.getElementById("registerBTN").style.pointerEvents="all";
+			document.getElementById("welcomBTN").style.pointerEvents="all";
+			document.getElementById("loginBTN").style.pointerEvents="all";
 		}
 	}
 	if(Math.floor(time_elapsed)>=maxTime){
 		window.clearInterval(interval);
 		if(score<100){
+			music.pause();
 			window.alert("You are better then "+ score+" points!");
 			document.getElementById('playA').style.visibility = "visible";
 			document.getElementById('playA').disabled = false;
+			document.getElementById("registerBTN").style.pointerEvents="all";
+			document.getElementById("welcomBTN").style.pointerEvents="all";
+			document.getElementById("loginBTN").style.pointerEvents="all";
 		}
 		else
 		{
+			music.pause();
 			window.alert("Winner!!!");
 			document.getElementById('playA').style.visibility = "visible";
 			document.getElementById('playA').disabled = false;
+			document.getElementById("registerBTN").style.pointerEvents="all";
+			document.getElementById("welcomBTN").style.pointerEvents="all";
+			document.getElementById("loginBTN").style.pointerEvents="all";
 		}
 	}
 	 else {
@@ -607,6 +625,7 @@ function UpdatePosition() {
 }
 
 function PlayerDie() {
+	board[shape.i][shape.j]=0;
 
 	board[shape.i][shape.j] = 0;
 
@@ -651,9 +670,13 @@ function PlayerDie() {
 	if(heart==0){
 		// game over
 		window.clearInterval(interval);
+		music.pause();
 		window.alert("Loser!");
 		document.getElementById('playA').style.visibility = "visible";
 		document.getElementById('playA').disabled = false;
+		document.getElementById("registerBTN").style.pointerEvents="all";
+		document.getElementById("welcomBTN").style.pointerEvents="all";
+		document.getElementById("loginBTN").style.pointerEvents="all";
 	}
 	pacman_remain++;
 	respawn();
