@@ -60,6 +60,9 @@ function Start() {
 	music.loop=true;
 	music.play();
 	maxTime=document.getElementById("setTm").value;
+	document.getElementById("registerBTN").style.pointerEvents="none";
+	document.getElementById("welcomBTN").style.pointerEvents="none";
+	document.getElementById("loginBTN").style.pointerEvents="none";
 	heart = 5;
 	for(var i=1; i<=heart; i++){
 		document.getElementById('heart'+i).src = "./imgs/heart.png";
@@ -555,6 +558,9 @@ function UpdatePosition() {
 			window.alert("Game 100% completed - you are a winner!");
 			document.getElementById('playA').style.visibility = "visible";
 			document.getElementById('playA').disabled = false;
+			document.getElementById("registerBTN").style.pointerEvents="all";
+			document.getElementById("welcomBTN").style.pointerEvents="all";
+			document.getElementById("loginBTN").style.pointerEvents="all";
 		}
 	}
 	if(Math.floor(time_elapsed)>=maxTime){
@@ -564,6 +570,9 @@ function UpdatePosition() {
 			window.alert("You are better then "+ score+" points!");
 			document.getElementById('playA').style.visibility = "visible";
 			document.getElementById('playA').disabled = false;
+			document.getElementById("registerBTN").style.pointerEvents="all";
+			document.getElementById("welcomBTN").style.pointerEvents="all";
+			document.getElementById("loginBTN").style.pointerEvents="all";
 		}
 		else
 		{
@@ -571,6 +580,9 @@ function UpdatePosition() {
 			window.alert("Winner!!!");
 			document.getElementById('playA').style.visibility = "visible";
 			document.getElementById('playA').disabled = false;
+			document.getElementById("registerBTN").style.pointerEvents="all";
+			document.getElementById("welcomBTN").style.pointerEvents="all";
+			document.getElementById("loginBTN").style.pointerEvents="all";
 		}
 	}
 	 else {
@@ -627,6 +639,9 @@ function PlayerDie() {
 		window.alert("Loser!");
 		document.getElementById('playA').style.visibility = "visible";
 		document.getElementById('playA').disabled = false;
+		document.getElementById("registerBTN").style.pointerEvents="all";
+		document.getElementById("welcomBTN").style.pointerEvents="all";
+		document.getElementById("loginBTN").style.pointerEvents="all";
 	}
 	pacman_remain++;
 	respawn();
